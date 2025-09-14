@@ -1,3 +1,5 @@
+<img width="1280" height="640" alt="capa" src="https://github.com/user-attachments/assets/5c2afd6a-152f-40a8-8fff-b87f5b463b99" />
+
 # Pesadelo no Escritório
 Repositório que contém os arquivos do jogo desenvolvido para o projeto da eletiva de Interfaces Gráficas
 
