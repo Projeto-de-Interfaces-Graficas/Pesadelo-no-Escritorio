@@ -8,7 +8,6 @@ void Enemy_SpawnEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemy
     enemy->active = 1;
     enemy->type = enemyType;
     enemy->sprite = image;
-
     switch (enemyType) {
         case 0: // Pencil
             enemy->hp = 20; enemy->dmg = 5; enemy->def = 20; enemy->spd = 2;
@@ -36,4 +35,14 @@ void Enemy_DrawEnemy(SDL_Renderer* renderer, Enemy* enemy) {
     }
     SDL_Rect enemyArea = {enemy->x, enemy->y, enemy->w, enemy->h};
     SDL_RenderCopy(renderer, enemy->sprite, NULL, &enemyArea);
+}
+
+int Enemy_CountActiveEnemies() {
+    int qtd = 0;
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        if (enemiesActive[i].active) {
+            qtd++;
+        }
+    }
+    return qtd;
 }

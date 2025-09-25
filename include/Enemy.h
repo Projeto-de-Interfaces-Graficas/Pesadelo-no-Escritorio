@@ -5,7 +5,6 @@
 
 /* Constants */
 #define MAX_ENEMIES 50 // Max amount of enemies that can be active simultaneously
-extern Enemy enemiesActive[MAX_ENEMIES];
 
 /* Types of enemies */
 typedef enum EnemyType {
@@ -27,16 +26,21 @@ typedef struct Enemy {
     int active; // State (dead or alive)
 } Enemy;
 
+extern Enemy enemiesActive[MAX_ENEMIES]; // Stores all spawned enemies
+
 /* Enemy creation */
 void Enemy_SpawnEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Texture* image);
 
 /* Enemy informations update */
-void Enemy_UptadeEnemy(Enemy* enemy);
+void Enemy_UpdateEnemy(Enemy* enemy);
 
 /* Enemy render */
 void Enemy_DrawEnemy(SDL_Renderer* renderer, Enemy* enemy);
 
 /* Enemy destruction */
 void Enemy_DestroyEnemy();
+
+/* Active enemies counter */
+int Enemy_CountActiveEnemies();
 
 #endif
