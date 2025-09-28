@@ -1,4 +1,5 @@
 #include "AUX_WaitEventTimeoutCount.h"
+#include "Weapons.h"
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
@@ -28,6 +29,8 @@ int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms) {
     else {
         *ms -= tempo_execucao;
     }
+
+    ATT_Duration_Weapon(tempo_execucao);
 
     return resultado;
 }

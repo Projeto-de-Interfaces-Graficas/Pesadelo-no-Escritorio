@@ -4,6 +4,8 @@
 #include <SDL2/SDL_image.h>
 #include "AUX_WaitEventTimeoutCount.h"
 #include "Enemy.h"
+#include "Weapons.h"
+
 
 #define LARGURA 800
 #define ALTURA 800
@@ -25,15 +27,17 @@ int main(int argc, char* argv[]) {
     SDL_Texture* image = IMG_LoadTexture(renderer, "assets/images/teste.png");
     assert(image != NULL);
 
-    for (int i = 0; i < 10; i++) {
+    //Spaw Enemys
+    /*for (int i = 0; i < 10; i++) { 
         Enemy_UpdateEnemy(&enemiesActive[i]);
         Enemy_SpawnEnemy(&enemiesActive[i], 0, i * 50, i * 50, image);
         printf("Spawnei %d inimigo(s)\n", i+1);
-    }
+    }*/
 
     int continuarTeste = 1;
     SDL_Event evt;
     Uint32 tempo = 16;
+    Selct_Weapon(0);
     while (continuarTeste) {
 
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00); 
@@ -45,16 +49,18 @@ int main(int argc, char* argv[]) {
             Enemy_DrawEnemy(renderer, &enemiesActive[j]);
         }
 
+        DrawWeapons(renderer);
         SDL_RenderPresent(renderer); 
-
         int isevt = AUX_WaitEventTimeoutCount(&evt, &tempo);
         if (isevt) {
             if (evt.type == SDL_QUIT) {
                 continuarTeste = 0;
             }
-        } else {
+        }
+        else {
             continue;
         }
+        
     }
 
     SDL_DestroyTexture(image);
