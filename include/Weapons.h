@@ -22,7 +22,7 @@ typedef struct
   SDL_Rect box;
 }Arma;
 
-void Selct_Weapon(int type);
+void Select_Weapon(int type);
 
 void Active_Weapon(int x , int y,int arma);
 

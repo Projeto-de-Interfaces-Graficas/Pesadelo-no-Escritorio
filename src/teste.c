@@ -6,66 +6,103 @@
 #include "Enemy.h"
 #include "Weapons.h"
 
+#define LARGURA 1280
+#define ALTURA 720
 
-#define LARGURA 800
-#define ALTURA 800
+int Initializer(SDL_Window** win, SDL_Renderer** ren);
+void Execution();
+int Finisher(SDL_Window** win, SDL_Renderer** ren);
 
 int main(int argc, char* argv[]) {
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { 
-        printf("Erro ao inicializar biblioteca!");
-        exit(-1); 
+
+    // SDL subsystems and components inicialization
+    SDL_Window* window = NULL;
+    SDL_Renderer* renderer = NULL;
+    int sucess;
+    sucess = Initializer(&window, &renderer);
+    switch (sucess) {
+        case 1:
+            printf("The program was initalized correctely!\n");
+            break;
+        case -1:
+            printf("Error at SDL library initialization!\n");
+            return sucess;
+        case -2:
+            printf("Error at window creation!\n");
+            return sucess;
+        case -3:
+            printf("Error at renderer creation!\n");
+            return sucess;
     }
-    
+
+    // Program execution
+    Execution();
+
+    // SDL subsystems and components finalization
+    sucess = 0;
+    sucess = Finisher(&window, &renderer);
+    switch (sucess) {
+        case 1:
+            printf("Libraries successfully closed!\n");
+            break;
+        case -1:
+            printf("Invalid window!\n");
+            return sucess;
+        case -2:
+            printf("Invalid renderer!\n");
+            return sucess;
+    }
+    return 0;
+
+}
+
+int Initializer(SDL_Window** win, SDL_Renderer** ren) {
+
+    int start;
+
+    // SDL library initialization
+    start = SDL_Init(SDL_INIT_EVERYTHING);
+    if (start < 0) {
+        return -1;
+    }
+
+    // SDL_image library initialization
     IMG_Init(0);
 
-    SDL_Window* window = SDL_CreateWindow("Teste - Inimigos", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0); 
-    assert(window != NULL);
-    
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0); 
-    assert(renderer != NULL);
-
-    SDL_Texture* image = IMG_LoadTexture(renderer, "assets/images/teste.png");
-    assert(image != NULL);
-
-    //Spaw Enemys
-    /*for (int i = 0; i < 10; i++) { 
-        Enemy_UpdateEnemy(&enemiesActive[i]);
-        Enemy_SpawnEnemy(&enemiesActive[i], 0, i * 50, i * 50, image);
-        printf("Spawnei %d inimigo(s)\n", i+1);
-    }*/
-
-    int continuarTeste = 1;
-    SDL_Event evt;
-    Uint32 tempo = 16;
-    Selct_Weapon(0);
-    while (continuarTeste) {
-
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00); 
-        SDL_RenderClear(renderer); 
-
-        // Draw enemies
-        int enemiesSpawned = Enemy_CountActiveEnemies();
-        for (int j = 0; j < enemiesSpawned; j++) {
-            Enemy_DrawEnemy(renderer, &enemiesActive[j]);
-        }
-
-        DrawWeapons(renderer);
-        SDL_RenderPresent(renderer); 
-        int isevt = AUX_WaitEventTimeoutCount(&evt, &tempo);
-        if (isevt) {
-            if (evt.type == SDL_QUIT) {
-                continuarTeste = 0;
-            }
-        }
-        else {
-            continue;
-        }
-        
+    // Window creation
+    *win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
+    if (*win == NULL) {
+        return -2;
     }
 
-    SDL_DestroyTexture(image);
-    SDL_DestroyRenderer(renderer); 
-    SDL_DestroyWindow(window); 
+    // Renderer creation
+    *ren = SDL_CreateRenderer(*win, -1, 0);
+    if (*ren == NULL) {
+        return -3;
+    }
+
+    // Return '1' if there aren't errors detected
+    return 1;
+}
+
+void Execution() {
+    printf("COLOCA COISA AQUI\n");
+}
+
+int Finisher(SDL_Window** win, SDL_Renderer** ren) {
+
+    // Check if the components were correctely passed
+    if (*win == NULL) {
+        return -1;
+    }
+    if(*ren == NULL) {
+        return -2;
+    }
+
+    // Finish SDL and external libraries subsystems and desalocate the created components
+    SDL_DestroyRenderer(*ren);
+    SDL_DestroyWindow(*win);
+    IMG_Quit();
     SDL_Quit();
-    return 0; 
+    return 1; 
 }
