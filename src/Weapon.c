@@ -4,7 +4,7 @@
 
 Arma selecionadas[3];
 
-void Selct_Weapon(int tipo){
+void Select_Weapon(int tipo){
   switch (tipo)
   {
   case 0:
