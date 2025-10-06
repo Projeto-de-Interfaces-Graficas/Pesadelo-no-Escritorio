@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Weapons.h"
 #include "Player.h"
+#include "Spawner.h"
 
 int InitializeGame(SDL_Window **win, SDL_Renderer **ren);
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
@@ -114,16 +115,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 {
 
 	/* EXECUTION VARIABLES */
+	Spawner spawner;
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
 	int isEvent;
 	Create_player(Comum);
-
-	// Teste de spawn de inimigos
-	for (int i = 0; i < 20; i++) {
-		Enemy_CreateEnemy(&enemies[i], 0, i*100, i*100, ren);
-	}
+	Spawner_Init(&spawner, 2000);
 
 	/* GAME LOOP */
 	while (keepRunning)
@@ -133,10 +131,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
 		SDL_RenderClear(ren);
 		Render_player(ren);
-		for (int i = 0; i < 20; i++) {
-			Enemy_UpdateEnemy(&enemies[i]);
-			Enemy_RenderEnemy(ren, &enemies[i]);
-		}
+		Spawner_UpdateEnemies(&spawner, ren);
+		Spawner_RenderEnemies(&spawner, ren);
 		SDL_RenderPresent(ren);
 
 		/* EVENTS CAPTURE*/
