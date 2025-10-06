@@ -7,9 +7,9 @@
 #include "Weapons.h"
 #include "Player.h"
 
-int Initializer(SDL_Window **win, SDL_Renderer **ren);
-void Execution(SDL_Window *win, SDL_Renderer *ren);
-int Finisher(SDL_Window **win, SDL_Renderer **ren);
+int InitializeGame(SDL_Window **win, SDL_Renderer **ren);
+void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
+int FinishGame(SDL_Window **win, SDL_Renderer **ren);
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
 	int successInit;
-	successInit = Initializer(&window, &renderer);
+	successInit = InitializeGame(&window, &renderer);
 	switch (successInit)
 	{
 	case 1:
@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
 		return successInit;
 	}
 
-	Execution(window, renderer);
+	ExecuteGame(window, renderer);
 
 	int successFinish;
-	successFinish = Finisher(&window, &renderer);
+	successFinish = FinishGame(&window, &renderer);
 	switch (successFinish)
 	{
 	case 1:
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 }
 
 /* GAME INICIALIZATION */
-int Initializer(SDL_Window **win, SDL_Renderer **ren)
+int InitializeGame(SDL_Window **win, SDL_Renderer **ren)
 {
 
 	int start;
@@ -109,11 +109,11 @@ int Initializer(SDL_Window **win, SDL_Renderer **ren)
 	return 1;
 }
 
-/* GAME EXECUTION */
-void Execution(SDL_Window *win, SDL_Renderer *ren)
+/* GAME ExecuteGame */
+void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 {
 
-	/* EXECUTION VARIABLES */
+	/* ExecuteGame VARIABLES */
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
@@ -168,7 +168,7 @@ void Execution(SDL_Window *win, SDL_Renderer *ren)
 }
 
 /* GAME FINALIZATION */
-int Finisher(SDL_Window **win, SDL_Renderer **ren)
+int FinishGame(SDL_Window **win, SDL_Renderer **ren)
 {
 
 	// Check if the components were correctely passed
