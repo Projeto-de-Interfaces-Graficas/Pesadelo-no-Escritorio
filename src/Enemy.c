@@ -1,7 +1,5 @@
 #include "Enemy.h"
 
-Enemy enemies[MAX_ENEMIES];
-
 void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren) {
     enemy->x = enemyPositionX;
     enemy->y = enemyPositionY;
@@ -37,12 +35,9 @@ void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy) {
     SDL_RenderCopy(ren, enemy->sprite, NULL, &enemyBox);
 }
 
-int Enemy_CountActiveEnemies() {
-    int qtd = 0;
-    for (int i = 0; i < MAX_ENEMIES; i++) {
-        if (enemies[i].active) {
-            qtd++;
-        }
+void Enemy_DestroyEnemy(Enemy* enemy) {
+    if (enemy->sprite) {
+        SDL_DestroyTexture(enemy->sprite);
+        enemy->active = 0;
     }
-    return qtd;
 }

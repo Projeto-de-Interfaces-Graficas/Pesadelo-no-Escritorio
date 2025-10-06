@@ -4,9 +4,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-/* Constants */
-#define MAX_ENEMIES 50 // Max amount of enemies that can be active simultaneously
-
 /* Types of enemies */
 typedef enum EnemyType {
     ENEMY_LAPIS,
@@ -27,8 +24,6 @@ typedef struct Enemy {
     int active; // State (dead or alive)
 } Enemy;
 
-extern Enemy enemies[MAX_ENEMIES]; // Stores all spawned enemies
-
 /* Enemy creation */
 void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren);
 
@@ -39,9 +34,6 @@ void Enemy_UpdateEnemy(Enemy* enemy);
 void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy);
 
 /* Enemy destruction */
-void Enemy_DestroyEnemy();
-
-/* Active enemies counter */
-int Enemy_CountActiveEnemies();
+void Enemy_DestroyEnemy(Enemy* enemy);
 
 #endif
