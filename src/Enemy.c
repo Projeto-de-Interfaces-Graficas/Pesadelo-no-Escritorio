@@ -1,8 +1,8 @@
 #include "Enemy.h"
 
-Enemy enemiesActive[MAX_ENEMIES];
+Enemy enemies[MAX_ENEMIES];
 
-void Enemy_SpawnEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Texture* image) {
+void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Texture* image) {
     enemy->x = enemyPositionX;
     enemy->y = enemyPositionY;
     enemy->active = 1;
@@ -29,7 +29,7 @@ void Enemy_UpdateEnemy(Enemy* enemy) {
     enemy->y += enemy->spd;
 }
 
-void Enemy_DrawEnemy(SDL_Renderer* renderer, Enemy* enemy) {
+void Enemy_RenderEnemy(SDL_Renderer* renderer, Enemy* enemy) {
     if (enemy->active == 0) {
         return;
     }

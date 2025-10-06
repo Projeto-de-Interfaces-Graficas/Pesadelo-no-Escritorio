@@ -8,12 +8,12 @@
 
 /* Types of enemies */
 typedef enum EnemyType {
-    PENCIL,
-    TELEPHONE,
-    PRINTER,
-    ADHESIVE_TAPE,
-    STAPLER,
-    PAPER_SHREDDER
+    ENEMY_LAPIS,
+    ENEMY_TELEFONE,
+    ENEMY_IMPRESSORA,
+    ENEMY_FITA_ADESIVA,
+    ENEMY_GRAMPEADOR,
+    ENEMY_FRAGMENTADORA
 } EnemyType;
 
 /* Enemy representation */
@@ -26,16 +26,16 @@ typedef struct Enemy {
     int active; // State (dead or alive)
 } Enemy;
 
-extern Enemy enemiesActive[MAX_ENEMIES]; // Stores all spawned enemies
+extern Enemy enemies[MAX_ENEMIES]; // Stores all spawned enemies
 
 /* Enemy creation */
-void Enemy_SpawnEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Texture* image);
+void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Texture* image);
 
 /* Enemy informations update */
 void Enemy_UpdateEnemy(Enemy* enemy);
 
 /* Enemy render */
-void Enemy_DrawEnemy(SDL_Renderer* renderer, Enemy* enemy);
+void Enemy_RenderEnemy(SDL_Renderer* renderer, Enemy* enemy);
 
 /* Enemy destruction */
 void Enemy_DestroyEnemy();
