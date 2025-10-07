@@ -25,7 +25,7 @@ typedef struct Enemy {
 } Enemy;
 
 /* Enemy creation */
-void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren);
+void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren);
 
 /* Enemy informations update */
 void Enemy_UpdateEnemy(Enemy* enemy);
