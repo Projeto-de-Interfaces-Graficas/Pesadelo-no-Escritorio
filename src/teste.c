@@ -6,19 +6,27 @@
 #include "Enemy.h"
 #include "Weapons.h"
 #include "Player.h"
-#include "Spawner.h"
+#include "EnemyManager.h"
 
-int InitializeGame(SDL_Window **win, SDL_Renderer **ren);
+int InitializeGame(SDL_Window **win, SDL_Renderer **ren, int monitorWidth, int monitorHeight);
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
 int FinishGame(SDL_Window **win, SDL_Renderer **ren);
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
+
+	// Setting monitor size
+	SDL_DisplayMode currentDisplayMode;
+	int monitorWidth;
+	int monitorHeight;
+	SDL_GetCurrentDisplayMode(0, &currentDisplayMode);
+	monitorWidth = currentDisplayMode.w;
+	monitorHeight = currentDisplayMode.h;
+	
 	int successInit;
-	successInit = InitializeGame(&window, &renderer);
+	successInit = InitializeGame(&window, &renderer, monitorWidth, monitorHeight);
 	switch (successInit)
 	{
 	case 1:
@@ -28,12 +36,9 @@ int main(int argc, char *argv[])
 		printf("Error at SDL library initialization!\n");
 		return successInit;
 	case -2:
-		printf("Error at getting display mode!\n");
-		return successInit;
-	case -3:
 		printf("Error at window creation!\n");
 		return successInit;
-	case -4:
+	case -3:
 		printf("Error at renderer creation!\n");
 		return successInit;
 	}
@@ -58,8 +63,7 @@ int main(int argc, char *argv[])
 }
 
 /* GAME INICIALIZATION */
-int InitializeGame(SDL_Window **win, SDL_Renderer **ren)
-{
+int InitializeGame(SDL_Window **win, SDL_Renderer **ren, int monitorWidth, int monitorHeight) {
 
 	int start;
 
@@ -73,38 +77,19 @@ int InitializeGame(SDL_Window **win, SDL_Renderer **ren)
 	// SDL_image library initialization
 	IMG_Init(0);
 
-	// Setting monitor size
-	SDL_DisplayMode currentDisplayMode;
-	int monitorWidth;
-	int monitorHeight;
-	if (SDL_GetCurrentDisplayMode(0, &currentDisplayMode) != 0)
-	{
-		return -2;
-	}
-	else
-	{
-		monitorWidth = currentDisplayMode.w;
-		monitorHeight = currentDisplayMode.h;
-	}
-
 	// Window creation
-	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, monitorWidth, monitorHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, monitorWidth, monitorHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if (*win == NULL)
 	{
-		return -3;
+		return -2;
 	}
 
 	// Renderer creation
 	*ren = SDL_CreateRenderer(*win, -1, 0);
 	if (*ren == NULL)
 	{
-		return -4;
+		return -3;
 	}
-
-	// Setting rendering size based on monitor size
-	int logicalWidth = 1980;
-	int logicalHeight = 1080;
-	SDL_RenderSetLogicalSize(*ren, logicalWidth, logicalHeight);
 
 	// Return '1' if there aren't errors detected
 	return 1;
@@ -115,13 +100,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 {
 
 	/* EXECUTION VARIABLES */
-	Spawner spawner;
+	EnemyManager enemyController;
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
 	int isEvent;
 	Create_player(Comum);
-	Spawner_Init(&spawner, 2000);
+	EnemyManager_Init(&enemyController, 2000);
 
 	/* GAME LOOP */
 	while (keepRunning)
@@ -131,8 +116,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
 		SDL_RenderClear(ren);
 		Render_player(ren);
-		Spawner_UpdateEnemies(&spawner, ren);
-		Spawner_RenderEnemies(&spawner, ren);
+		EnemyManager_UpdateEnemies(&enemyController, ren);
+		EnemyManager_RenderEnemies(&enemyController, ren);
 		SDL_RenderPresent(ren);
 
 		/* EVENTS CAPTURE*/
