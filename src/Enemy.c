@@ -1,21 +1,21 @@
 #include "Enemy.h"
 
-void Enemy_CreateEnemy(Enemy* enemy, int enemyType, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren) {
+void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren) {
     enemy->x = enemyPositionX;
     enemy->y = enemyPositionY;
     enemy->active = 1;
-    enemy->type = enemyType;
-    switch (enemyType) {
-        case 0: // Pencil
+    enemy->type = type;
+    switch (type) {
+        case ENEMY_LAPIS:
             enemy->hp = 20; enemy->dmg = 5; enemy->def = 20; enemy->spd = 2;
             enemy->w = 16; enemy->h = 16;
             enemy->sprite = IMG_LoadTexture(ren, "assets/images/teste.png");
             break;
-        case 1: // Telephone
-        case 2: // Printer
-        case 3: // Adhesive Tape
-        case 4: // Stapler
-        case 5: // Paper Shredder
+        case ENEMY_TELEFONE: 
+        case ENEMY_IMPRESSORA: 
+        case ENEMY_FITA_ADESIVA: 
+        case ENEMY_GRAMPEADOR: 
+        case ENEMY_FRAGMENTADORA: 
     }
 }
 
