@@ -1,6 +1,7 @@
 {
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
-    "sdl.h": "c"
+    "sdl.h": "c",
+    "enemymanager.h": "c"
   }
 }

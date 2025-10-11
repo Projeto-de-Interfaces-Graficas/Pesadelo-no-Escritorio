@@ -19,12 +19,12 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int ene
     }
 }
 
-void Enemy_UpdateEnemy(Enemy* enemy) {
+void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY) {
     if (enemy->active == 0) {
         return;
     }
-    enemy->x += enemy->spd;
-    enemy->y += enemy->spd;
+    enemy->x += directionX * enemy->spd;
+    enemy->y += directionY * enemy->spd;
 }
 
 void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy) {

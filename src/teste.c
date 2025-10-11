@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <assert.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "AUX_WaitEventTimeoutCount.h"
@@ -109,7 +108,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			delay = 16;
 
 			// Update entities non-related to events
-			EnemyManager_UpdateEnemies(&enemyController, ren);
+			EnemyManager_UpdateEnemies(&enemyController, ren, player);
 		}
 	}
 }

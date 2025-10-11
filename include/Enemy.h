@@ -28,7 +28,7 @@ typedef struct Enemy {
 void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren);
 
 /* Enemy informations update */
-void Enemy_UpdateEnemy(Enemy* enemy);
+void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY);
 
 /* Enemy render */
 void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy);
