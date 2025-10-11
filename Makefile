@@ -13,7 +13,7 @@ BUILD_DIR = build
 CFLAGS = -Wall -I$(INC_DIR)
 
 # Bibliotecas SDL
-LIBS = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf
+LIBS = -lSDL2 -lSDL2_gfx -lSDL2_image -lSDL2_ttf -lm
 
 # Fontes
 SRC = $(wildcard $(SRC_DIR)/*.c)

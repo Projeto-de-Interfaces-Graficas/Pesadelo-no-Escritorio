@@ -1,6 +1,4 @@
 #include "EnemyManager.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /* Creates and initializes the variables of the EnemyManager object */
 void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
@@ -9,29 +7,42 @@ void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         EnemyManager->enemies[i].active = 0;
     }
+    EnemyManager->enemiesActive = 0;
+    srand(time(NULL));
 }
 
 /* Control enemies updating */
-void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
-    Uint32 currentTime = SDL_GetTicks();
+void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player) {
 
-    // Spawns an enemy if enough time has passed since the last enemy was spawned
+    // Spawns an enemy in a circular area around the player if enough time has passed since the last enemy was spawned
+    Uint32 currentTime = SDL_GetTicks();
     if (currentTime - EnemyManager->lastSpawnTime >= EnemyManager->spawnInterval) {
         EnemyManager->lastSpawnTime = currentTime;
         for (int i = 0; i < MAX_ENEMIES; i++) {
             if (!EnemyManager->enemies[i].active) {
-                int x = rand() % 600;
-                int y = rand() % 400;
+                int n = rand();
+                double nd = (double)n / RAND_MAX;
+                double angle = nd * 2 * M_PI;
+                int x = (player.box.x + 16) + 100 * cos(angle);
+                int y = (player.box.y + 16) + 100 * sin(angle);
                 Enemy_CreateEnemy(&EnemyManager->enemies[i], 0, x, y, ren);
+                EnemyManager->enemiesActive += 1;
                 break;
             }
         }
+        
     }
 
-    // Updates the active enemies behavior
+    // Moves all the active enemies in a straight line to the player position
+    int directionX, directionY;
+    float normalizedDirectionX, normalizedDirectionY;
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
-            Enemy_UpdateEnemy(&EnemyManager->enemies[i]);
+            directionX = player.box.x - EnemyManager->enemies[i].x;
+            directionY = player.box.y - EnemyManager->enemies[i].y;
+            normalizedDirectionX = directionX / sqrt(directionX * directionX + directionY * directionY);
+            normalizedDirectionY = directionY / sqrt(directionX * directionX + directionY * directionY);
+            Enemy_UpdateEnemy(&EnemyManager->enemies[i], normalizedDirectionX, normalizedDirectionY);
         }
     }
 }

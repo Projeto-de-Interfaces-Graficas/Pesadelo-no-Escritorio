@@ -13,10 +13,10 @@ void Create_player(int i){
     player.movement_speed = 5;
     player.xp = 0;
     player.xp_for_level_up = 100;
-    player.box.x = 0;
-    player.box.y = 0;
-    player.box.w = 100;
-    player.box.h = 100;
+    player.box.x = 384;
+    player.box.y = 284;
+    player.box.w = 32;
+    player.box.h = 32;
     Select_Weapon(0);
     break;
     default:
