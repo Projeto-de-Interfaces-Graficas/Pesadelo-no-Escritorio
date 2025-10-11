@@ -106,7 +106,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 	Uint32 delay = 16;
 	int isEvent;
 	Create_player(Comum);
-	EnemyManager_Init(&enemyController, 2000);
+	EnemyManager_StartEnemies(&enemyController, 2000);
 
 	/* GAME LOOP */
 	while (keepRunning)

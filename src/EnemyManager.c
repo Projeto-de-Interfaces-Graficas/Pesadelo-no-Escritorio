@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /* Creates and initializes the variables of the EnemyManager object */
-void EnemyManager_Init(EnemyManager* EnemyManager, int spawnInterval) {
+void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
     EnemyManager->lastSpawnTime = SDL_GetTicks();
     EnemyManager->spawnInterval = spawnInterval;
     for (int i = 0; i < MAX_ENEMIES; i++) {
