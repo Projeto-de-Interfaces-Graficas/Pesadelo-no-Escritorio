@@ -58,6 +58,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
 
+	Select_Weapon(ARMA_PROJETIL);
+
 	/* GAME LOOP */
 	while (keepRunning) {
 
@@ -69,7 +71,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		// Entities rendering
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
-
+		DrawWeapons(ren);
 		// Frame exibition
 		SDL_RenderPresent(ren);
 
