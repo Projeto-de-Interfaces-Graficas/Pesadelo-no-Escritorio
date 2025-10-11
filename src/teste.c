@@ -8,96 +8,46 @@
 #include "Player.h"
 #include "EnemyManager.h"
 
-int InitializeGame(SDL_Window **win, SDL_Renderer **ren, int monitorWidth, int monitorHeight);
+#define LARGURA 800
+#define ALTURA 600
+
+void InitializeGame(SDL_Window **win, SDL_Renderer **ren);
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
-int FinishGame(SDL_Window **win, SDL_Renderer **ren);
+void FinishGame(SDL_Window **win, SDL_Renderer **ren);
 
 int main(int argc, char *argv[]) {
 
+	/* GAME INITIALIZATION */
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
+	InitializeGame(&window, &renderer);
 
-	// Setting monitor size
-	SDL_DisplayMode currentDisplayMode;
-	int monitorWidth;
-	int monitorHeight;
-	SDL_GetCurrentDisplayMode(0, &currentDisplayMode);
-	monitorWidth = currentDisplayMode.w;
-	monitorHeight = currentDisplayMode.h;
-	
-	int successInit;
-	successInit = InitializeGame(&window, &renderer, monitorWidth, monitorHeight);
-	switch (successInit)
-	{
-	case 1:
-		printf("The program was initalized correctely!\n");
-		break;
-	case -1:
-		printf("Error at SDL library initialization!\n");
-		return successInit;
-	case -2:
-		printf("Error at window creation!\n");
-		return successInit;
-	case -3:
-		printf("Error at renderer creation!\n");
-		return successInit;
-	}
-
+	/* GAME EXECUTION */
 	ExecuteGame(window, renderer);
 
-	int successFinish;
-	successFinish = FinishGame(&window, &renderer);
-	switch (successFinish)
-	{
-	case 1:
-		printf("Libraries successfully closed!\n");
-		break;
-	case -1:
-		printf("Invalid window!\n");
-		return successFinish;
-	case -2:
-		printf("Invalid renderer!\n");
-		return successFinish;
-	}
+	/* GAME FINALIZATION */
+	FinishGame(&window, &renderer);
 	return 0;
 }
 
 /* GAME INICIALIZATION */
-int InitializeGame(SDL_Window **win, SDL_Renderer **ren, int monitorWidth, int monitorHeight) {
-
-	int start;
+void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
 
 	// SDL library initialization
-	start = SDL_Init(SDL_INIT_EVERYTHING);
-	if (start < 0)
-	{
-		return -1;
-	}
+	SDL_Init(SDL_INIT_EVERYTHING);
 
 	// SDL_image library initialization
 	IMG_Init(0);
 
 	// Window creation
-	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, monitorWidth, monitorHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	if (*win == NULL)
-	{
-		return -2;
-	}
+	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
 
 	// Renderer creation
 	*ren = SDL_CreateRenderer(*win, -1, 0);
-	if (*ren == NULL)
-	{
-		return -3;
-	}
-
-	// Return '1' if there aren't errors detected
-	return 1;
 }
 
 /* GAME EXECUTION */
-void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
-{
+void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 	/* EXECUTION VARIABLES */
 	EnemyManager enemyController;
@@ -109,30 +59,32 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 	EnemyManager_StartEnemies(&enemyController, 2000);
 
 	/* GAME LOOP */
-	while (keepRunning)
-	{
+	while (keepRunning) {
 
 		/* FRAME BUILDING */
+		// Initial clearing of render
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
 		SDL_RenderClear(ren);
+
+		// Entities rendering
 		Render_player(ren);
-		EnemyManager_UpdateEnemies(&enemyController, ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
+
+		// Frame exibition
 		SDL_RenderPresent(ren);
 
 		/* EVENTS CAPTURE*/
 		isEvent = AUX_WaitEventTimeoutCount(&event, &delay);
-		if (isEvent)
-		{
-			// Quiting event
-			if (event.type == SDL_QUIT)
-			{
+		if (isEvent) {
+
+			// Ends game loop execution
+			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
 			}
-			if (event.type == SDL_KEYDOWN)
-			{
-				switch(event.key.keysym.sym)
-				{
+
+			// Moves player
+			if (event.type == SDL_KEYDOWN) {
+				switch(event.key.keysym.sym) {
 				case 'w':
 					player.box.y -= player.movement_speed;
 					break;
@@ -149,32 +101,23 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren)
 					break;
 				}
 			}
-		}
-		else
-		{
+		} else {
+
+			// Resets delay
 			delay = 16;
+
+			// Update entities non-related to events
+			EnemyManager_UpdateEnemies(&enemyController, ren);
 		}
 	}
 }
 
 /* GAME FINALIZATION */
-int FinishGame(SDL_Window **win, SDL_Renderer **ren)
-{
-
-	// Check if the components were correctely passed
-	if (*win == NULL)
-	{
-		return -1;
-	}
-	if (*ren == NULL)
-	{
-		return -2;
-	}
+void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 
 	// Finish SDL and external libraries subsystems and desalocate the created components
 	SDL_DestroyRenderer(*ren);
 	SDL_DestroyWindow(*win);
 	IMG_Quit();
 	SDL_Quit();
-	return 1;
 }
