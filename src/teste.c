@@ -71,6 +71,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
 		DrawWeapons(ren);
+
 		// Frame exibition
 		SDL_RenderPresent(ren);
 
@@ -110,6 +111,9 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			// Update entities non-related to events
 			EnemyManager_UpdateEnemies(&enemyController, ren, player);
 		}
+
+		// Checks collisions between entities
+		CollisionManager_DetectCollision(enemyController, player);
 	}
 }
 

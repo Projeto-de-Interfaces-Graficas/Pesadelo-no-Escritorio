@@ -34,6 +34,7 @@ void Select_Weapon(int tipo)
 		new_weapon.recharging_time = 0;
 		new_weapon.duration = 0;
 		new_weapon.tipo = ARMA_PROJETIL;
+		break;
 	default:
 		break;
 	}

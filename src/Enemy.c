@@ -8,8 +8,8 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int ene
     switch (type) {
         case ENEMY_LAPIS:
             enemy->hp = 20; enemy->dmg = 5; enemy->def = 20; enemy->spd = 2;
-            enemy->w = 16; enemy->h = 16;
-            enemy->sprite = IMG_LoadTexture(ren, "assets/images/teste.png");
+            enemy->w = 32; enemy->h = 32;
+            enemy->sprite = IMG_LoadTexture(ren, "assets/images/lapis.png");
             break;
         case ENEMY_TELEFONE: 
         case ENEMY_IMPRESSORA: 
