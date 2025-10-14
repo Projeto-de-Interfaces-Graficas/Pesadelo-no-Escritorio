@@ -1,12 +1,4 @@
-#include "CollisionManager.h"
-
-void CollisionManager_DetectCollision(EnemyManager* enemyController, Player* player) {
-
-    // Between enemies and player
-    for (int i = 0; i < MAX_ENEMIES; i++) {
-        
-    }
-}
+#include "Collision.h"
 
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
 
