@@ -6,6 +6,7 @@
 #include "Weapons.h"
 #include "Player.h"
 #include "EnemyManager.h"
+#include "Collision.h"
 
 #define LARGURA 800
 #define ALTURA 600
@@ -112,8 +113,14 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			EnemyManager_UpdateEnemies(&enemyController, ren, player);
 		}
 
-		// Checks collisions between entities
-		CollisionManager_DetectCollision(enemyController, player);
+		// Check collisions between the enemies and the player
+		for (int i = 0; i < MAX_ENEMIES; i++) {
+			int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
+			if (hasCollided) {
+				Enemy_DestroyEnemy(&enemyController.enemies[i]);
+			}
+		}
+		
 	}
 }
 

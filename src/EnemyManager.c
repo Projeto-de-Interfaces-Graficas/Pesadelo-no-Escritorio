@@ -38,8 +38,8 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
     float normalizedDirectionX, normalizedDirectionY;
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
-            directionX = player.box.x - EnemyManager->enemies[i].x;
-            directionY = player.box.y - EnemyManager->enemies[i].y;
+            directionX = player.box.x - EnemyManager->enemies[i].box.x;
+            directionY = player.box.y - EnemyManager->enemies[i].box.y;
             normalizedDirectionX = directionX / sqrt(directionX * directionX + directionY * directionY);
             normalizedDirectionY = directionY / sqrt(directionX * directionX + directionY * directionY);
             Enemy_UpdateEnemy(&EnemyManager->enemies[i], normalizedDirectionX, normalizedDirectionY);
@@ -52,14 +52,6 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
             Enemy_RenderEnemy(ren, &EnemyManager->enemies[i]);
-        }
-    }
-}
-
-void EnemyManager_DestroyEnemies(EnemyManager* EnemyManager) {
-    for (int i = 0; i < MAX_ENEMIES; i++) {
-        if (EnemyManager->enemies[i].active) {
-            Enemy_DestroyEnemy(&EnemyManager->enemies[i]);
         }
     }
 }

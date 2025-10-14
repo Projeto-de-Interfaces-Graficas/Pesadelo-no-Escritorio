@@ -17,8 +17,7 @@ typedef enum EnemyType {
 /* Enemy representation */
 typedef struct Enemy {
     int type; // Type of enemy
-    int x, y; // Position
-    int w, h; // Dimensions (size)
+    SDL_Rect box; // Enemy area in-game
     int hp, dmg, def, spd; // Life, damage, defense and speed status
     SDL_Texture* sprite; // Current sprite
     int active; // State (dead or alive)

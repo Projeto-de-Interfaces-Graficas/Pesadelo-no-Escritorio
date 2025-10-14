@@ -23,6 +23,6 @@ int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
     cima_r2 = r2->y;
     baixo_r2 = r2->y + r2->h;
 
-    // Se nenhum dos lados estiver se tocando, retorna 0 
+    // Se não houver colisão, retorna 0
     return !(baixo_r1 < cima_r2 || cima_r1 > baixo_r2 || direito_r1 < esquerdo_r2 || esquerdo_r1 > direito_r2);
 }
