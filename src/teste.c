@@ -50,7 +50,7 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 	/* EXECUTION VARIABLES */
-	EnemyManager enemyController;
+	EnemyManager enemyController = {0};
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
@@ -58,7 +58,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
 
-	Select_Weapon(ARMA_PROJETIL);
+	//Select_Weapon(ARMA_PROJETIL);
 
 	/* GAME LOOP */
 	while (keepRunning) {
@@ -71,7 +71,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		// Entities rendering
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
-		DrawWeapons(ren);
+		//DrawWeapons(ren);
 
 		// Frame exibition
 		SDL_RenderPresent(ren);
@@ -115,12 +115,20 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		// Check collisions between the enemies and the player
 		for (int i = 0; i < MAX_ENEMIES; i++) {
-			int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
-			if (hasCollided) {
-				Enemy_DestroyEnemy(&enemyController.enemies[i]);
+			if (enemyController.enemies[i].active) {
+				int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
+				if (hasCollided) {
+					printf("Vida do jogador antes de tomar dano: %d\n", player.player_hp);
+					player.player_hp -= enemyController.enemies[i].dmg;
+					printf("Vida do jogador depois de tomar dano: %d\n", player.player_hp);
+					if (player.player_hp <= 0) {
+						keepRunning = 0;
+						printf("VOCÊ MORREU!!!!\n");
+						break;
+					}
+				}
 			}
-		}
-		
+		}		
 	}
 }
 
