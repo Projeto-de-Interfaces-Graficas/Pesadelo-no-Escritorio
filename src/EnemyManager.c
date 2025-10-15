@@ -34,7 +34,7 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
     }
 
     // Moves all the active enemies in a straight line to the player position
-    int directionX, directionY;
+    float directionX, directionY;
     float normalizedDirectionX, normalizedDirectionY;
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
