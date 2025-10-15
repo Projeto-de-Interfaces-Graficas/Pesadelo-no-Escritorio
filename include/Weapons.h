@@ -24,6 +24,7 @@ typedef struct
 
 typedef struct{
 	Uint32 is_on_screen;
+	Uint32 is_on_screen_last;
 	Arma *Weapon;
 	SDL_Rect box;
 	float dir_x;
