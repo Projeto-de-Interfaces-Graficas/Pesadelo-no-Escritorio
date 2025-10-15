@@ -7,7 +7,7 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int ene
     enemy->type = type;
     switch (type) {
         case ENEMY_LAPIS:
-            enemy->hp = 20; enemy->dmg = 5; enemy->def = 20; enemy->spd = 2;
+            enemy->hp = 5; enemy->dmg = 5; enemy->def = 5; enemy->spd = 1.5;
             enemy->box.w = 32; enemy->box.h = 32;
             enemy->sprite = IMG_LoadTexture(ren, "assets/images/lapis.png");
             break;
