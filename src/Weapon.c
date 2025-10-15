@@ -1,7 +1,7 @@
 #include <Weapons.h>
 #include <math.h>
 
-#define seconds 100
+#define seconds 1000
 
 #define Max_projectiles  50
 #define Max_Weapons  3
@@ -17,23 +17,27 @@ void Select_Weapon(int tipo)
 	Arma new_weapon;
 	switch (tipo)
 	{
-	case 0:
-		new_weapon.cooldown = 10;
+	case ARMA_CHICOTE:
+		new_weapon.cooldown = 2 * seconds;
 		new_weapon.damage = 3;
-		new_weapon.duration = 2;
+		new_weapon.duration = 1 * seconds;
 		new_weapon.range = 50;
 		new_weapon.recharging_time = 0;
 		new_weapon.tipo = ARMA_CHICOTE;
 		new_weapon.active = 0;
 		break;
-	case 1:
+	case ARMA_PROJETIL:
 		new_weapon.active = 0;
-		new_weapon.cooldown = 2;
+		new_weapon.cooldown = 2 * seconds;
 		new_weapon.damage = 1;
 		new_weapon.range= 100;
 		new_weapon.recharging_time = 0;
-		new_weapon.duration = 0;
+		new_weapon.duration = 1 * seconds;
 		new_weapon.tipo = ARMA_PROJETIL;
+		new_weapon.box.x =0;
+		new_weapon.box.y =0;
+		new_weapon.box.w =0;
+		new_weapon.box.h =0;
 		break;
 	default:
 		break;
@@ -66,15 +70,15 @@ void Active_Weapon(int x, int y, Arma arma)
 		novo_projetil.active = 1;
 		novo_projetil.pierce = 1;
 		novo_projetil.Weapon = &arma;
-		novo_projetil.speed = 25;
+		novo_projetil.speed = 5;
 		int x1,y1;
 		x1 = 100;
 		y1 = 100;
 		x = x1-x;
 		y= y1-y;
 		int dis = sqrt(x*x+y*y);
-		novo_projetil.dir_x = x1/dis;
-		novo_projetil.dir_y = y1/dis;
+		novo_projetil.dir_x = (float)x1/(float)dis;
+		novo_projetil.dir_y = (float)y1/(float)dis;
 		for(int i =0;i<Max_projectiles;i++){
 			if(list_projects[i].active != 1){
 				list_projects[i] = novo_projetil;
@@ -89,21 +93,24 @@ void Active_Weapon(int x, int y, Arma arma)
 
 void DrawWeapons(SDL_Renderer *renderer)
 {
-	for (int i = 0; i < Max_Weapons; i++)
+	for (int i = 0; i < n_weapons_choices; i++)
 	{
-		if (selecionadas[i].active)
+		if (selecionadas[i].active == 1)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &selecionadas[i].box);
 		}
 	}
 	for(int i=0;i<Max_projectiles;i++){
-		if (list_projects[i].active)
+		if (list_projects[i].active == 1)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &list_projects[i].box);
-			list_projects[i].box.x += 1;
-			list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
+			if(list_projects[i].is_on_screen-list_projects[i].is_on_screen_last >= 50){
+				list_projects[i].box.x -= list_projects[i].dir_y * list_projects[i].speed;
+				list_projects[i].box.y -= list_projects[i].dir_y * list_projects[i].speed;
+				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
+			}
 		}
 	}
 }
@@ -111,20 +118,18 @@ void DrawWeapons(SDL_Renderer *renderer)
 void ATT_Duration_Weapon(Uint32 tempo_execucao)
 {
 	for(int i=0;i<Max_projectiles;i++){
-		if (list_projects[i].active)
-		{
+		if (list_projects[i].active == 1)
+		{	
 			list_projects[i].is_on_screen += tempo_execucao;
-			printf("list_projects[i].is_on_screen = %d, list_projects[i].Weapon->duration = %d\n",list_projects[i].is_on_screen,list_projects[i].Weapon->duration);
 			if (list_projects[i].is_on_screen >= list_projects[i].Weapon->duration)
 			{
-				printf("Inativo\n");
 				list_projects[i].active = 0;
 			}
 		}
 	}
-	for (int i = 0; i < Max_Weapons; i++)
+	for (int i = 0; i < n_weapons_choices; i++)
 	{
-		if (selecionadas[i].active)
+		if (selecionadas[i].active == 1)
 		{
 			selecionadas[i].is_on_screen += tempo_execucao;
 			if (selecionadas[i].is_on_screen >= selecionadas[i].duration)
@@ -132,7 +137,7 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao)
 				selecionadas[i].active = 0;
 			}
 		}
-		else
+		else if(selecionadas[i].active == 0)
 		{
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
