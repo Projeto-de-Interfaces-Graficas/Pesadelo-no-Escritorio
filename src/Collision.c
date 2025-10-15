@@ -2,12 +2,6 @@
 
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
 
-    // Verifica se os dois retângulos foram passados
-    if (r1 == NULL || r2 == NULL) {
-        printf("Erro! Um ou mais retângulos não foram passados!");
-        return -1;
-    }
-
     // Define os lados dos retângulos
     int direito_r1, direito_r2, esquerdo_r1, esquerdo_r2, cima_r1, cima_r2, baixo_r1, baixo_r2;
 
