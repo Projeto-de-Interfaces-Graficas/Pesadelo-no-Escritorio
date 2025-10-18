@@ -1,5 +1,6 @@
 #include <Weapons.h>
 #include <math.h>
+#include <Player.h>
 
 #define seconds 1000
 
@@ -53,10 +54,12 @@ void Active_Weapon(int x, int y, Arma arma)
 	switch (arma.tipo)
 	{
 	case ARMA_CHICOTE:
+		x = (player.box.x + (player.box.w)/2) - selecionadas[0].box.w;
+		y = (player.box.y + (player.box.h)/2) - selecionadas[0].box.h;
 		selecionadas[0].box.x = x;
 		selecionadas[0].box.y = y;
-		selecionadas[0].box.w = 50;
-		selecionadas[0].box.h = 50;
+		selecionadas[0].box.w = 100;
+		selecionadas[0].box.h = 15;
 		selecionadas[0].active = 1;
 		selecionadas[0].is_on_screen = 0;
 		break;
@@ -99,6 +102,10 @@ void DrawWeapons(SDL_Renderer *renderer)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &selecionadas[i].box);
+			if(selecionadas[i].tipo == ARMA_CHICOTE){
+				selecionadas[0].box.x = (player.box.x + (player.box.w)/2);
+				selecionadas[0].box.y = (player.box.y + (player.box.h)/2) - selecionadas[0].box.h/2;
+			}
 		}
 	}
 	for(int i=0;i<Max_projectiles;i++){
