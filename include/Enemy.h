@@ -18,6 +18,7 @@ typedef enum EnemyType {
 typedef struct Enemy {
     int type; // Type of enemy
     SDL_Rect box; // Enemy area in-game
+    float posX, posY; // Position X and Y of the enemy 
     int hp, dmg, def; // Life, damage and defense status
     float spd; // Movement speed status
     SDL_Texture* sprite; // Current sprite
@@ -25,10 +26,10 @@ typedef struct Enemy {
 } Enemy;
 
 /* Enemy creation */
-void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, int enemyPositionX, int enemyPositionY, SDL_Renderer* ren);
+void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Renderer* ren);
 
 /* Enemy informations update */
-void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY);
+void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY, float deltaTime);
 
 /* Enemy render */
 void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy);

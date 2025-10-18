@@ -57,6 +57,9 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	int isEvent;
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
+	Uint32 previousTime = SDL_GetTicks();
+	Uint32 currentTime;
+	float deltaTime;
 
 	//Select_Weapon(ARMA_PROJETIL);
 
@@ -109,8 +112,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			// Resets delay
 			delay = 16;
 
+			// Time calculation for enemies movement
+			currentTime = SDL_GetTicks();
+			deltaTime = (currentTime - previousTime) / 1000.0f; 
+			previousTime = currentTime;
+
 			// Update entities non-related to events
-			EnemyManager_UpdateEnemies(&enemyController, ren, player);
+			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime);
 		}
 
 		// Check collisions between the enemies and the player
@@ -118,14 +126,12 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			if (enemyController.enemies[i].active) {
 				int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
 				if (hasCollided) {
-					printf("Vida do jogador antes de tomar dano: %d\n", player.player_hp);
 					player.player_hp -= enemyController.enemies[i].dmg;
-					printf("Vida do jogador depois de tomar dano: %d\n", player.player_hp);
-					if (player.player_hp <= 0) {
+					/* if (player.player_hp <= 0) {
 						keepRunning = 0;
 						printf("VOCÊ MORREU!!!!\n");
-						break;
-					}
+						break; 
+					} */ 
 				}
 			}
 		}		

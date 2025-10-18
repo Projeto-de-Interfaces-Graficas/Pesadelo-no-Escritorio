@@ -19,7 +19,7 @@ typedef struct {
 } EnemyManager;
 
 void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval);
-void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player);
+void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player, float deltaTime);
 void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren);
 
 #endif
