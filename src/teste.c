@@ -55,12 +55,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	int keepRunning = 1;
 	Uint32 delay = 16;
 	int isEvent;
-	Create_player(Comum);
-	EnemyManager_StartEnemies(&enemyController, 2000);
 	Uint32 previousTime = SDL_GetTicks();
 	Uint32 currentTime;
 	float deltaTime;
 
+	/* ENTITIES INITIALIZATION */
+	Create_player(Comum);
+	EnemyManager_StartEnemies(&enemyController, 2000);
 	Select_Weapon(ARMA_PROJETIL);
 
 	/* GAME LOOP */
@@ -118,17 +119,20 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			previousTime = currentTime;
 
 			// Update entities non-related to events
-			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime);
+			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 		}
 
-		// Check collisions between the enemies and the player
+		/* COLLISION CHECKING */
+		// Check collision between all active enemies and the player
 		for (int i = 0; i < MAX_ENEMIES; i++) {
 			if (enemyController.enemies[i].active) {
 				int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
 				if (hasCollided) {
 					currentTime = SDL_GetTicks();
 					if (currentTime - player.last_damage_time >= player.invencibility_time) {
-						player.player_hp -= enemyController.enemies[i].dmg;
+						Take_damage(enemyController.enemies[i].dmg);
+						player.last_damage_time = currentTime;
+						printf("Tomou dano!\nVida atual: %d\n", player.player_hp); 
 					}
 					if (player.player_hp <= 0) {
 						keepRunning = 0;
