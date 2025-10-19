@@ -12,11 +12,10 @@ void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
 }
 
 /* CONTROLS ENEMIES SPAWN AND MOVEMENT */
-void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player, float deltaTime) {
+void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player, float deltaTime, float radiusX, float radiusY) {
 
     /* Spawns an enemy in a circular area around the player if enough time has passed since the last enemy was spawned */
     Uint32 currentTime = SDL_GetTicks();
-
     if (currentTime - EnemyManager->lastSpawnTime >= EnemyManager->spawnInterval) {
         EnemyManager->lastSpawnTime = currentTime;
         for (int i = 0; i < MAX_ENEMIES; i++) {
@@ -24,8 +23,8 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
                 int n = rand();
                 double nd = (double)n / RAND_MAX;
                 double angle = nd * 2 * M_PI;
-                float x = (player.box.x + 16) + 100 * cos(angle);
-                float y = (player.box.y + 16) + 100 * sin(angle);
+                float x = (player.box.x + 16) + radiusX * cos(angle);
+                float y = (player.box.y + 16) + radiusY * sin(angle);
                 Enemy_CreateEnemy(&EnemyManager->enemies[i], 0, x, y, ren);
                 EnemyManager->enemiesActive += 1;
                 break;
