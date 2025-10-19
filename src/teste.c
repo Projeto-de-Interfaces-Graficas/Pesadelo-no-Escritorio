@@ -61,7 +61,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Uint32 currentTime;
 	float deltaTime;
 
-	//Select_Weapon(ARMA_PROJETIL);
+	Select_Weapon(ARMA_PROJETIL);
 
 	/* GAME LOOP */
 	while (keepRunning) {
@@ -74,7 +74,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		// Entities rendering
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
-		//DrawWeapons(ren);
+		DrawWeapons(ren);
 
 		// Frame exibition
 		SDL_RenderPresent(ren);
@@ -126,12 +126,15 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			if (enemyController.enemies[i].active) {
 				int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
 				if (hasCollided) {
-					player.player_hp -= enemyController.enemies[i].dmg;
-					/* if (player.player_hp <= 0) {
+					currentTime = SDL_GetTicks();
+					if (currentTime - player.last_damage_time >= player.invencibility_time) {
+						player.player_hp -= enemyController.enemies[i].dmg;
+					}
+					if (player.player_hp <= 0) {
 						keepRunning = 0;
 						printf("VOCÊ MORREU!!!!\n");
 						break; 
-					} */ 
+					}
 				}
 			}
 		}		

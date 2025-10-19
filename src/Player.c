@@ -17,6 +17,8 @@ void Create_player(int i){
     player.box.y = 284;
     player.box.w = 32;
     player.box.h = 32;
+    player.last_damage_time = 0;
+    player.invencibility_time = 1000;
     Select_Weapon(0);
     break;
     default:
