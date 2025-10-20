@@ -15,6 +15,8 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren);
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
 void FinishGame(SDL_Window **win, SDL_Renderer **ren);
 
+void Damage_Controler();
+
 int main(int argc, char *argv[]) {
 
 	/* GAME INITIALIZATION */
@@ -120,6 +122,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 			// Update entities non-related to events
 			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
+			Damage_Controler(&enemyController);
 		}
 
 		/* COLLISION CHECKING */
@@ -153,4 +156,25 @@ void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 	SDL_DestroyWindow(*win);
 	IMG_Quit();
 	SDL_Quit();
+}
+
+void Damage_Controler(EnemyManager* enemyController){
+	for(int i =0;i<n_weapons_choices;i++){
+		for(int j =0;j<MAX_ENEMIES;j++){
+			if(enemyController->enemies[j].active != 1) continue;
+			if(Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)){
+				enemyController->enemies[j].hp -= selecionadas[i].damage;
+				printf("Vida do Inimigo acertado = %d\n",enemyController->enemies[j].hp);
+			}
+		}
+	}
+	for(int i =0;i<Max_projectiles;i++){
+		if(list_projects[i].active != 1) continue;
+		for(int j =0;j<MAX_ENEMIES;j++){
+			if(enemyController->enemies[j].active != 1) continue;
+			if(Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)){
+				enemyController->enemies[j].hp -= list_projects[i].Weapon->damage;
+			}
+		}
+	}
 }

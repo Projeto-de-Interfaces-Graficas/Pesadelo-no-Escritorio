@@ -3,6 +3,11 @@
 
 #include <SDL2/SDL.h>
 
+#define seconds 1000
+
+#define Max_projectiles  50
+#define Max_Weapons  3
+
 typedef enum{
 	ARMA_CHICOTE,
 	ARMA_PROJETIL,
@@ -34,14 +39,18 @@ typedef struct{
 	int active;
 }Projectiles;
 
+extern int n_weapons_choices;
+
+extern Arma selecionadas[Max_Weapons];
+
+extern Projectiles list_projects[Max_projectiles];
+
 void Select_Weapon(int type);
 
-void Active_Weapon(int x , int y,Arma arma);
+void Active_Weapon(Arma arma);
 
 void DrawWeapons(SDL_Renderer *renderer);
 
 void ATT_Duration_Weapon(Uint32 tempo_execucao);
-
-void Get_Near_Enemy();
 
 #endif

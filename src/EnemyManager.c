@@ -74,3 +74,19 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
         }
     }
 }
+
+int Get_Near_Enemy(EnemyManager* EnemyManager,int *x,int*y,int x0,int y0){
+    int best_dis = 9999999;
+    int dis = 9999999;
+    for(int i=0;i<MAX_ENEMIES;i++){
+        int x1= EnemyManager->enemies[i].box.x-x0;
+		int y1= EnemyManager->enemies[i].box.y-y0;
+		int dis = sqrt(x1*x1+y1*y1);
+        if(dis<best_dis){
+            best_dis = dis;
+            y = EnemyManager->enemies[i].box.y;
+            x = EnemyManager->enemies[i].box.x;
+        }
+    }
+    return dis;
+}
