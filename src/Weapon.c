@@ -2,11 +2,6 @@
 #include <math.h>
 #include <Player.h>
 
-#define seconds 1000
-
-#define Max_projectiles  50
-#define Max_Weapons  3
-
 int n_weapons_choices =0;
 
 Arma selecionadas[Max_Weapons];
@@ -20,7 +15,7 @@ void Select_Weapon(int tipo)
 	{
 	case ARMA_CHICOTE:
 		new_weapon.cooldown = 2 * seconds;
-		new_weapon.damage = 3;
+		new_weapon.damage = 10;
 		new_weapon.duration = 1 * seconds;
 		new_weapon.range = 50;
 		new_weapon.recharging_time = 0;
@@ -49,13 +44,13 @@ void Select_Weapon(int tipo)
 	}
 }
 
-void Active_Weapon(int x, int y, Arma arma)
+void Active_Weapon(Arma arma)
 {
 	switch (arma.tipo)
 	{
 	case ARMA_CHICOTE:
-		x = (player.box.x + (player.box.w)/2) - selecionadas[0].box.w;
-		y = (player.box.y + (player.box.h)/2) - selecionadas[0].box.h;
+		int x = (player.box.x + (player.box.w)/2) - selecionadas[0].box.w;
+		int y = (player.box.y + (player.box.h)/2) - selecionadas[0].box.h;
 		selecionadas[0].box.x = x;
 		selecionadas[0].box.y = y;
 		selecionadas[0].box.w = 100;
@@ -66,14 +61,14 @@ void Active_Weapon(int x, int y, Arma arma)
 	case ARMA_PROJETIL:
 		Projectiles novo_projetil;
 		novo_projetil.is_on_screen = 0;
-		novo_projetil.box.x = x;
-		novo_projetil.box.y = y;
+		novo_projetil.box.x = player.box.x;
+		novo_projetil.box.y = player.box.y;
 		novo_projetil.box.w = 10;
 		novo_projetil.box.h = 10;
 		novo_projetil.active = 1;
 		novo_projetil.pierce = 1;
 		novo_projetil.Weapon = &arma;
-		novo_projetil.speed = 5;
+		novo_projetil.speed = 10;
 		int x1,y1;
 		x1 = 100;
 		y1 = 100;
@@ -113,7 +108,7 @@ void DrawWeapons(SDL_Renderer *renderer)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &list_projects[i].box);
-			if(list_projects[i].is_on_screen-list_projects[i].is_on_screen_last >= 50){
+			if(list_projects[i].is_on_screen-list_projects[i].is_on_screen_last >= 20){
 				list_projects[i].box.x -= list_projects[i].dir_y * list_projects[i].speed;
 				list_projects[i].box.y -= list_projects[i].dir_y * list_projects[i].speed;
 				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
@@ -149,7 +144,7 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao)
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
 			{
-				Active_Weapon(400, 400, selecionadas[i]);
+				Active_Weapon(selecionadas[i]);
 				selecionadas[i].recharging_time = 0;
 			}
 		}
