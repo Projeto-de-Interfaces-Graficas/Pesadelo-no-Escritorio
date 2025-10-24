@@ -121,27 +121,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			// Update entities non-related to events
 			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 		}
-
+		
 		/* COLLISION CHECKING */
-		// Check collision between all active enemies and the player
-		for (int i = 0; i < MAX_ENEMIES; i++) {
-			if (enemyController.enemies[i].active) {
-				int hasCollided = Collision_RectAndRect(&enemyController.enemies[i].box, &player.box);
-				if (hasCollided) {
-					currentTime = SDL_GetTicks();
-					if (currentTime - player.last_damage_time >= player.invencibility_time) {
-						Take_damage(enemyController.enemies[i].dmg);
-						player.last_damage_time = currentTime;
-						printf("Tomou dano!\nVida atual: %d\n", player.player_hp); 
-					}
-					if (player.player_hp <= 0) {
-						keepRunning = 0;
-						printf("VOCÊ MORREU!!!!\n");
-						break; 
-					}
-				}
-			}
-		}		
+		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning); // Collision between the player and the enemies
+		
 	}
 }
 

@@ -1,5 +1,26 @@
 #include "Collision.h"
 
+void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int* keepRunning) {
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        if (enemyController->enemies[i].active) {
+			int hasCollided = Collision_RectAndRect(&enemyController->enemies[i].box, &player->box);
+			if (hasCollided) {
+				Uint32 currentTime = SDL_GetTicks();
+				if (currentTime - player->last_damage_time >= player->invencibility_time) {
+					Take_damage(enemyController->enemies[i].dmg);
+					player->last_damage_time = currentTime;
+					printf("Tomou dano!\nVida atual: %d\n", player->player_hp); 
+				}
+                if (player->player_hp <= 0) {
+                    *keepRunning = 0;
+                    printf("VOCÊ MORREU!!!\n");
+                    break;
+		        }
+			}
+		}
+	}
+}
+
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
 
     // Define os lados dos retângulos
