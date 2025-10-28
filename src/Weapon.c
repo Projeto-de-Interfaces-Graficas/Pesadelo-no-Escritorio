@@ -45,13 +45,13 @@ void Select_Weapon(int tipo)
 	}
 }
 
-void Active_Weapon(Arma arma)
+void Active_Weapon(Arma arma, int i)
 {
 	switch (arma.tipo)
 	{
 	case ARMA_CHICOTE:
-		selecionadas[0].box.w = 100;
-		selecionadas[0].box.h = 15;
+		selecionadas[i].box.w = 100;
+		selecionadas[i].box.h = 15;
 		int x;
 		if (player.dir == -1)
 		{
@@ -61,11 +61,11 @@ void Active_Weapon(Arma arma)
 		{
 			x = (player.box.x + (player.box.w) / 2);
 		}
-		selecionadas[0].box.x = x;
+		selecionadas[i].box.x = x;
 		int y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h;
-		selecionadas[0].box.y = y;
-		selecionadas[0].active = 1;
-		selecionadas[0].is_on_screen = 0;
+		selecionadas[i].box.y = y;
+		selecionadas[i].active = 1;
+		selecionadas[i].is_on_screen = 0;
 		break;
 	case ARMA_PROJETIL:
 		Projectiles novo_projetil;
@@ -86,11 +86,11 @@ void Active_Weapon(Arma arma)
 		int dis = sqrt(x*x+y*y);
 		novo_projetil.dir_x = (float)x1/(float)dis;
 		novo_projetil.dir_y = (float)y1/(float)dis; */
-		for (int i = 0; i < Max_projectiles; i++)
+		for (int j = 0; j < Max_projectiles; j++)
 		{
-			if (list_projects[i].active != 1)
+			if (list_projects[j].active != 1)
 			{
-				list_projects[i] = novo_projetil;
+				list_projects[j] = novo_projetil;
 				break;
 			}
 		}
@@ -166,7 +166,7 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao)
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
 			{
-				Active_Weapon(selecionadas[i]);
+				Active_Weapon(selecionadas[i],i);
 				selecionadas[i].recharging_time = 0;
 			}
 		}

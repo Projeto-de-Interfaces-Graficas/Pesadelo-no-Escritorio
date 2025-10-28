@@ -47,7 +47,7 @@ extern Projectiles list_projects[Max_projectiles];
 
 void Select_Weapon(int type);
 
-void Active_Weapon(Arma arma);
+void Active_Weapon(Arma arma, int i);
 
 void DrawWeapons(SDL_Renderer *renderer);
 
