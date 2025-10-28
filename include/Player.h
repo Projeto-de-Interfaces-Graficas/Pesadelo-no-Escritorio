@@ -22,6 +22,7 @@ typedef struct
   float movement_speed;
   float xp;
   float xp_for_level_up;
+  float posX, posY;
   Uint32 last_damage_time;
   Uint32 invencibility_time;
   SDL_Rect box;

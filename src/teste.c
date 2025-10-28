@@ -55,6 +55,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	/* GAME LOOP */
 	while (keepRunning) {
 
+		currentTime = SDL_GetTicks();
+		deltaTime = (currentTime - previousTime) / 1000.0f; 
+		previousTime = currentTime;
+
 		/* FRAME BUILDING */
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
 		SDL_RenderClear(ren);
@@ -68,43 +72,45 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		/* CAPTURA DE EVENTOS */
 		isEvent = AUX_WaitEventTimeoutCount(&event, &delay);
 		if (isEvent) {
-
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
 			}
 
-		} else {
-			delay = 16;
-
-			// Time calculation for enemies movement
-			currentTime = SDL_GetTicks();
-			deltaTime = (currentTime - previousTime) / 1000.0f; 
-			previousTime = currentTime;
-
-			// Update entities non-related to events
-			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
-			Damage_Controler(&enemyController);
 		}
+
+		delay = 16;
+		EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
+		Damage_Controler(&enemyController);
 		
 		/* MOVIMENTAÇÃO DO JOGADOR */
+		float movX = 0, movY = 0;
 		const Uint8* teclado = SDL_GetKeyboardState(NULL);
 		if (teclado[SDL_SCANCODE_W]) {
-			player.box.y -= player.movement_speed;
+			movY -= 1;
 		}
 
 		if (teclado[SDL_SCANCODE_A]) {
-			player.box.x -= player.movement_speed;
+			movX -= 1;
 			player.dir = -1;
 		}
 
 		if (teclado[SDL_SCANCODE_S]) {
-			player.box.y += player.movement_speed;
+			movY += 1;
 		}
 
 		if (teclado[SDL_SCANCODE_D]) {
-			player.box.x += player.movement_speed;
+			movX += 1;
 			player.dir = 1;
 		}
+		float len = sqrtf(movX * movX + movY * movY);
+		if (len > 0) {
+			movX /= len;
+			movY /= len;
+		}
+		player.posX += movX * player.movement_speed * deltaTime;
+		player.posY += movY * player.movement_speed * deltaTime;
+		player.box.x = (int) player.posX;
+		player.box.y = (int) player.posY;
 
 		/* COLLISION CHECKING */
 		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning); // Collision between the player and the enemies
