@@ -75,7 +75,7 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     }
 }
 
-int Get_Near_Enemy(EnemyManager* EnemyManager,int *x,int*y,int x0,int y0){
+/* int Get_Near_Enemy(EnemyManager* EnemyManager,int *x,int*y,int x0,int y0){
     int best_dis = 9999999;
     int dis = 9999999;
     for(int i=0;i<MAX_ENEMIES;i++){
@@ -89,4 +89,4 @@ int Get_Near_Enemy(EnemyManager* EnemyManager,int *x,int*y,int x0,int y0){
         }
     }
     return dis;
-}
+} */ 
