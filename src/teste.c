@@ -18,33 +18,19 @@ void FinishGame(SDL_Window **win, SDL_Renderer **ren);
 void Damage_Controler();
 
 int main(int argc, char *argv[]) {
-
-	/* GAME INITIALIZATION */
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
 	InitializeGame(&window, &renderer);
-
-	/* GAME EXECUTION */
 	ExecuteGame(window, renderer);
-
-	/* GAME FINALIZATION */
 	FinishGame(&window, &renderer);
 	return 0;
 }
 
 /* GAME INICIALIZATION */
 void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
-
-	// SDL library initialization
 	SDL_Init(SDL_INIT_EVERYTHING);
-
-	// SDL_image library initialization
 	IMG_Init(0);
-
-	// Window creation
 	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
-
-	// Renderer creation
 	*ren = SDL_CreateRenderer(*win, -1, 0);
 }
 
@@ -64,55 +50,30 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
-	Select_Weapon(ARMA_PROJETIL);
+	/* Select_Weapon(ARMA_PROJETIL); */
 
 	/* GAME LOOP */
 	while (keepRunning) {
 
 		/* FRAME BUILDING */
-		// Initial clearing of render
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
 		SDL_RenderClear(ren);
 
-		// Entities rendering
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
 		DrawWeapons(ren);
 
-		// Frame exibition
 		SDL_RenderPresent(ren);
 
-		/* EVENTS CAPTURE*/
+		/* CAPTURA DE EVENTOS */
 		isEvent = AUX_WaitEventTimeoutCount(&event, &delay);
 		if (isEvent) {
 
-			// Ends game loop execution
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
 			}
 
-			// Moves player
-			if (event.type == SDL_KEYDOWN) {
-				switch(event.key.keysym.sym) {
-				case 'w':
-					player.box.y -= player.movement_speed;
-					break;
-				case 'a':
-					player.box.x -= player.movement_speed;
-					break;
-				case 's':
-					player.box.y += player.movement_speed;
-					break;
-				case 'd':
-					player.box.x += player.movement_speed;
-					break;
-				default:
-					break;
-				}
-			}
 		} else {
-
-			// Resets delay
 			delay = 16;
 
 			// Time calculation for enemies movement
@@ -125,6 +86,24 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			Damage_Controler(&enemyController);
 		}
 		
+		/* MOVIMENTAÇÃO DO JOGADOR */
+		const Uint8* teclado = SDL_GetKeyboardState(NULL);
+		if (teclado[SDL_SCANCODE_W]) {
+			player.box.y -= player.movement_speed;
+		}
+
+		if (teclado[SDL_SCANCODE_A]) {
+			player.box.x -= player.movement_speed;
+		}
+
+		if (teclado[SDL_SCANCODE_S]) {
+			player.box.y += player.movement_speed;
+		}
+
+		if (teclado[SDL_SCANCODE_D]) {
+			player.box.x += player.movement_speed;
+		}
+
 		/* COLLISION CHECKING */
 		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning); // Collision between the player and the enemies
 		
@@ -133,8 +112,6 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 /* GAME FINALIZATION */
 void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
-
-	// Finish SDL and external libraries subsystems and desalocate the created components
 	SDL_DestroyRenderer(*ren);
 	SDL_DestroyWindow(*win);
 	IMG_Quit();
