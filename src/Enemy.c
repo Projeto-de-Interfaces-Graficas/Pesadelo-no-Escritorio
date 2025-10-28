@@ -1,7 +1,6 @@
 #include "Enemy.h"
 
 void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Renderer* ren) {
-
     // Initializes enemy logical position (float) and render position (int)
     enemy->posX = enemyPositionX;
     enemy->posY = enemyPositionY;
@@ -30,7 +29,9 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
 }
 
 void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY, float deltaTime) {
-
+    if(enemy->hp <= 0){
+        enemy->active = 0;
+    }
     // Only updates if the enemy is active
     if (enemy->active == 0) {
         return;

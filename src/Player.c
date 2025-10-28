@@ -4,6 +4,7 @@
 Player player;
 
 void Create_player(int i){
+  player.dir = 1;
   switch (i)
   {
   case 0:
@@ -19,6 +20,7 @@ void Create_player(int i){
     player.box.h = 32;
     player.last_damage_time = 0;
     player.invencibility_time = 500;
+
     Select_Weapon(0);
     break;
     default:

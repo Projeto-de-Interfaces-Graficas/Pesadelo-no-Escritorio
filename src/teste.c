@@ -94,6 +94,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		if (teclado[SDL_SCANCODE_A]) {
 			player.box.x -= player.movement_speed;
+			player.dir = -1;
 		}
 
 		if (teclado[SDL_SCANCODE_S]) {
@@ -102,6 +103,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		if (teclado[SDL_SCANCODE_D]) {
 			player.box.x += player.movement_speed;
+			player.dir = 1;
 		}
 
 		/* COLLISION CHECKING */
@@ -121,17 +123,16 @@ void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 void Damage_Controler(EnemyManager* enemyController){
 	for(int i =0;i<n_weapons_choices;i++){
 		for(int j =0;j<MAX_ENEMIES;j++){
-			if(enemyController->enemies[j].active != 1) continue;
+			if(enemyController->enemies[j].active != 1 || selecionadas[i].active != 1) continue;
 			if(Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)){
 				enemyController->enemies[j].hp -= selecionadas[i].damage;
-				printf("Vida do Inimigo acertado = %d\n",enemyController->enemies[j].hp);
 			}
 		}
 	}
 	for(int i =0;i<Max_projectiles;i++){
 		if(list_projects[i].active != 1) continue;
 		for(int j =0;j<MAX_ENEMIES;j++){
-			if(enemyController->enemies[j].active != 1) continue;
+			if(enemyController->enemies[j].active != 1 || list_projects[i].active != 1 ) continue;
 			if(Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)){
 				enemyController->enemies[j].hp -= list_projects[i].Weapon->damage;
 			}
