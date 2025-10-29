@@ -62,7 +62,7 @@ void Active_Weapon(Arma arma, int i)
 			x = (player.box.x + (player.box.w) / 2);
 		}
 		selecionadas[i].box.x = x;
-		int y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h;
+		int y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h/2;
 		selecionadas[i].box.y = y;
 		selecionadas[i].active = 1;
 		selecionadas[i].is_on_screen = 0;
