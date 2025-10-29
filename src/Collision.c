@@ -21,6 +21,60 @@ void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int
 	}
 }
 
+void Collision_EnemyAndEnemy(EnemyManager* enemyController) {
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        Enemy* e1 = &enemyController->enemies[i];
+        if (e1->active) {
+            for (int j = i + 1; j < MAX_ENEMIES; j++) {
+                Enemy* e2 = &enemyController->enemies[j];
+                if (e2->active) {
+                    int hasCollided = Collision_RectAndRect(&e1->box, &e2->box);
+                    if (hasCollided) {
+                        // Calcula a sobreposição horizontal e vertical entre os retângulos
+                        float overlapX = 0, overlapY = 0;
+                        float e1_direito = e1->posX + e1->box.w;
+                        float e2_direito = e2->posX + e2->box.w;
+                        float e1_baixo = e1->posY + e1->box.h;
+                        float e2_baixo = e2->posY + e2->box.h;
+
+                        if (e1->posX < e2->posX) {
+                            overlapX = e1_direito - e2->posX;
+                        } else {
+                            overlapX = e2_direito - e1->posX;
+                        }
+
+                        if (e1->posY < e2->posY) {
+                            overlapY = e1_baixo - e2->posY;
+                        } else {
+                            overlapY = e2_baixo - e1->posY;
+                        }
+
+                        // Afasta os dois inimigos ao mesmo tempo, dependendo de qual está na direita/esquerda ou cima/baixo
+                        if (overlapX < overlapY) {
+                            if (e1->posX < e2->posX) {
+                                e1->posX -= (overlapX / 2);
+                                e2->posX += (overlapX / 2);
+                            } else {
+                                e1->posX += (overlapX / 2);
+                                e2->posX -= (overlapX / 2);
+                            }
+                        } else {
+                            if (e1->posY < e2->posY) {
+                                e1->posY -= (overlapY / 2);
+                                e2->posY += (overlapY / 2);
+                            } else {
+                                e1->posY += (overlapY / 2);
+                                e2->posY -= (overlapY / 2);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
+
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
 
     // Define os lados dos retângulos

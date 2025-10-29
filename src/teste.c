@@ -80,6 +80,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		delay = 16;
 		EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
+		Collision_EnemyAndEnemy(&enemyController);
 		Damage_Controler(&enemyController);
 		
 		/* MOVIMENTAÇÃO DO JOGADOR */
