@@ -1,6 +1,5 @@
 #include "EnemyManager.h"
 
-/* CREATE AND INITIALIZE AN ENEMY MANAGER */
 void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
     EnemyManager->lastSpawnTime = SDL_GetTicks();
     EnemyManager->spawnInterval = spawnInterval;
@@ -11,10 +10,8 @@ void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
     srand(time(NULL));
 }
 
-/* CONTROLS ENEMIES SPAWN AND MOVEMENT */
 void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player, float deltaTime, float radiusX, float radiusY) {
-
-    /* Spawns an enemy in a circular area around the player if enough time has passed since the last enemy was spawned */
+    /* Spawna um inimigo em uma posição aleatória fora da visão do jogador, se tempo suficiente passou desde que o último inimigo foi spawnado */
     Uint32 currentTime = SDL_GetTicks();
     if (currentTime - EnemyManager->lastSpawnTime >= EnemyManager->spawnInterval) {
         EnemyManager->lastSpawnTime = currentTime;
@@ -32,26 +29,22 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
         }       
     }
 
-    /* Moves all the active enemies in a straight line to the player position */
-    float enemyX, enemyY; // Enemy current position 
-    float playerX, playerY; // Player current position
-    float directionX, directionY; // Direction that the enemy will move
-    float normalizedDirectionX, normalizedDirectionY, magnitude; // Normalized movement direction
+    /* Move todos os inimigos ativos na direção do jogador */
+    float enemyX, enemyY; // Posição atual do inimigo
+    float playerX, playerY; // Posição atual do jogador
+    float directionX, directionY; // Direção que o inimigo vai se mover
+    float normalizedDirectionX, normalizedDirectionY, magnitude; // Vetor direção normalizado
 
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
-
-            // Converts entities positions to float
             enemyX = (float) EnemyManager->enemies[i].box.x;
             enemyY = (float) EnemyManager->enemies[i].box.y;
             playerX = (float) player.box.x;
             playerY = (float) player.box.y;
 
-            // Calculate the direction that the enemy will move
             directionX = playerX - enemyX;
             directionY = playerY - enemyY;
 
-            // Normalization of the direction vector
             magnitude = sqrtf(directionX * directionX + directionY * directionY);
             if (magnitude != 0) {
                 normalizedDirectionX = directionX / magnitude;
@@ -66,7 +59,7 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
     }
 }
 
-/* Control enemies rendering */
+/* Controla a renderização dos inimigos na tela */
 void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
