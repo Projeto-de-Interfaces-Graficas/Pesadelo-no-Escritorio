@@ -1,6 +1,8 @@
 #include <Weapons.h>
 #include <math.h>
 #include <Player.h>
+#include <EnemyManager.h>
+
 
 int n_weapons_choices = 0;
 
@@ -45,14 +47,15 @@ void Select_Weapon(int tipo)
 	}
 }
 
-void Active_Weapon(Arma arma, int i)
+void Active_Weapon(Arma *arma, int i)
 {
-	switch (arma.tipo)
+	int x;
+	int y;
+	switch (arma->tipo)
 	{
 	case ARMA_CHICOTE:
 		selecionadas[i].box.w = 100;
 		selecionadas[i].box.h = 15;
-		int x;
 		if (player.dir == -1)
 		{
 			x = (player.box.x + (player.box.w) / 2) - selecionadas[0].box.w;
@@ -62,7 +65,7 @@ void Active_Weapon(Arma arma, int i)
 			x = (player.box.x + (player.box.w) / 2);
 		}
 		selecionadas[i].box.x = x;
-		int y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h/2;
+		y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h/2;
 		selecionadas[i].box.y = y;
 		selecionadas[i].active = 1;
 		selecionadas[i].is_on_screen = 0;
@@ -70,22 +73,22 @@ void Active_Weapon(Arma arma, int i)
 	case ARMA_PROJETIL:
 		Projectiles novo_projetil;
 		novo_projetil.is_on_screen = 0;
-		novo_projetil.box.x = player.box.x;
-		novo_projetil.box.y = player.box.y;
+		novo_projetil.box.x = (player.box.x + (player.box.w) / 2);
+		novo_projetil.box.y = (player.box.y + (player.box.h) / 2);
 		novo_projetil.box.w = 10;
 		novo_projetil.box.h = 10;
 		novo_projetil.active = 1;
 		novo_projetil.pierce = 1;
-		novo_projetil.Weapon = &arma;
+		novo_projetil.Weapon = arma;
+
 		novo_projetil.speed = 10;
-		/* int x1,y1;
-		x1 = 100;
-		y1 = 100;
-		x = x1-x;
-		y= y1-y;
-		int dis = sqrt(x*x+y*y);
-		novo_projetil.dir_x = (float)x1/(float)dis;
-		novo_projetil.dir_y = (float)y1/(float)dis; */
+		x = novo_projetil.box.x;
+		y = novo_projetil.box.y;
+		float x1,y1;
+		float dis = Get_Near_Enemy(&enemyController,&x1,&y1,x,y);
+		printf("Dano da arma igual %d\n",novo_projetil.Weapon->damage);
+		novo_projetil.dir_x = x1/dis;
+		novo_projetil.dir_y = y1/dis; 
 		for (int j = 0; j < Max_projectiles; j++)
 		{
 			if (list_projects[j].active != 1)
@@ -130,8 +133,8 @@ void DrawWeapons(SDL_Renderer *renderer)
 			SDL_RenderFillRect(renderer, &list_projects[i].box);
 			if (list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
 			{
-				list_projects[i].box.x -= list_projects[i].dir_y * list_projects[i].speed;
-				list_projects[i].box.y -= list_projects[i].dir_y * list_projects[i].speed;
+				list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
+				list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
 				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
 			}
 		}
@@ -166,7 +169,7 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao)
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
 			{
-				Active_Weapon(selecionadas[i],i);
+				Active_Weapon(&selecionadas[i],i);
 				selecionadas[i].recharging_time = 0;
 			}
 		}

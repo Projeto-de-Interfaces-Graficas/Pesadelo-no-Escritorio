@@ -1,5 +1,7 @@
 #include "EnemyManager.h"
 
+EnemyManager enemyController = {0};
+
 void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval) {
     EnemyManager->lastSpawnTime = SDL_GetTicks();
     EnemyManager->spawnInterval = spawnInterval;
@@ -68,18 +70,19 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     }
 }
 
-/* int Get_Near_Enemy(EnemyManager* EnemyManager,int *x,int*y,int x0,int y0){
-    int best_dis = 9999999;
-    int dis = 9999999;
+ float Get_Near_Enemy(EnemyManager* EnemyManager,float *x,float*y,int x0,int y0){
+    float best_dis = 9999999;
     for(int i=0;i<MAX_ENEMIES;i++){
-        int x1= EnemyManager->enemies[i].box.x-x0;
-		int y1= EnemyManager->enemies[i].box.y-y0;
+        if(EnemyManager->enemies[i].active != 1) continue;
+        int x1= (EnemyManager->enemies[i].box.x + EnemyManager->enemies[i].box.w/2)-x0;
+		int y1= (EnemyManager->enemies[i].box.y+EnemyManager->enemies[i].box.h/2)-y0;
 		int dis = sqrt(x1*x1+y1*y1);
         if(dis<best_dis){
             best_dis = dis;
-            y = EnemyManager->enemies[i].box.y;
-            x = EnemyManager->enemies[i].box.x;
+            *y = y1;
+            *x = x1;
         }
     }
-    return dis;
-} */ 
+    printf("O valor de x1 = %f e de y1=%f e dis = %f no Manager \n",*x,*y,best_dis);
+    return best_dis;
+}  
