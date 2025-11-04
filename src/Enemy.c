@@ -15,7 +15,7 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
             enemy->hp = 5; 
             enemy->dmg = 5; 
             enemy->def = 5; 
-            enemy->spd = 120.0f;
+            enemy->spd = 100;
             enemy->box.w = 32; 
             enemy->box.h = 32;
             enemy->sprite = IMG_LoadTexture(ren, "assets/images/lapis.png");
