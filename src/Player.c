@@ -11,7 +11,7 @@ void Create_player(int i){
     player.player_hp = 100;
     player.damage = 1;
     player.defence = 1;
-    player.movement_speed = 200.0f;
+    player.movement_speed = 200;
     player.xp = 0;
     player.xp_for_level_up = 100;
     player.box.x = 384;
@@ -22,6 +22,7 @@ void Create_player(int i){
     player.invencibility_time = 500;
     player.posX = 384;
     player.posY = 284;
+    player.luck = 100;
     Select_Weapon(0);
     break;
     default:

@@ -23,6 +23,7 @@ typedef struct
   float xp;
   float xp_for_level_up;
   float posX, posY;
+  float luck;
   Uint32 last_damage_time;
   Uint32 invencibility_time;
   SDL_Rect box;
