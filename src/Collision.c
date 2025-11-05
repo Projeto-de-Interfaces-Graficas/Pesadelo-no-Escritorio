@@ -75,6 +75,36 @@ void Collision_EnemyAndEnemy(EnemyManager* enemyController) {
     }
 }
 
+void Collision_EnemyAndWeapon(EnemyManager* enemyController) {
+
+    // Checagem das armas corpo-a-corpo
+    for(int i =0;i<n_weapons_choices;i++) {
+	    if(selecionadas[i].active != 1) continue;
+		for(int j =0; j<MAX_ENEMIES; j++) {
+			if(enemyController->enemies[j].active != 1) continue;
+			if(Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)) {
+				enemyController->enemies[j].hp -= selecionadas[i].damage;
+				printf("Dano chiquote =%d\n", selecionadas[i].damage);
+			}
+		}
+	}
+    
+    // Checagem das armas que geram projéteis
+    for(int i =0;i<Max_projectiles;i++){
+		if(list_projects[i].active != 1) continue;
+		for(int j =0;j<MAX_ENEMIES;j++){
+			if(enemyController->enemies[j].active != 1) continue;
+			if(Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)){
+				printf("Vida inimigo Antes tiro = %d e dano da arma = %d\n",enemyController->enemies[j].hp,list_projects[i].Weapon->damage);
+				enemyController->enemies[j].hp -= list_projects[i].Weapon->damage;
+				printf("Vida inimigo pois tiro = %d\n",enemyController->enemies[j].hp);
+				list_projects[i].pierce -= 1;
+				if(list_projects[i].pierce <= 0) list_projects[i].active = 0;
+			}
+		}
+	}
+}
+
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
 
     // Define os lados dos retângulos
