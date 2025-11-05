@@ -57,6 +57,5 @@ void Enemy_DestroyEnemy(Enemy* enemy) {
     if (enemy->active) {
         SDL_DestroyTexture(enemy->sprite);
         enemy->active = 0;
-        printf("Inimigo destruído\n");
     }
 }

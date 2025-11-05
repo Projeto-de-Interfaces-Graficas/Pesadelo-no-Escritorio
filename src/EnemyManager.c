@@ -1,4 +1,7 @@
 #include "EnemyManager.h"
+#include "Experience.h"
+//#include <stdlib.h>
+//#include <time.h>
 
 EnemyManager enemyController = {0};
 
@@ -61,13 +64,18 @@ void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, P
     }
 }
 
-/* Controla a renderização dos inimigos na tela */
 void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (EnemyManager->enemies[i].active) {
             Enemy_RenderEnemy(ren, &EnemyManager->enemies[i]);
         }
     }
+}
+
+void EnemyManager_EnemiesDrops(Enemy* enemy) {
+    //srand(time(NULL));
+    //int n = rand()
+
 }
 
  float Get_Near_Enemy(EnemyManager* EnemyManager,float *x,float*y,int x0,int y0){

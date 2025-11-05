@@ -76,19 +76,20 @@ void Collision_EnemyAndEnemy(EnemyManager* enemyController) {
 }
 
 void Collision_EnemyAndWeapon(EnemyManager* enemyController) {
-
     // Checagem das armas corpo-a-corpo
     for(int i =0;i<n_weapons_choices;i++) {
 	    if(selecionadas[i].active != 1) continue;
 		for(int j =0; j<MAX_ENEMIES; j++) {
-			if(enemyController->enemies[j].active != 1) continue;
-			if(Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)) {
+			if (enemyController->enemies[j].active != 1) continue;
+			if (Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)) {
 				enemyController->enemies[j].hp -= selecionadas[i].damage;
-				printf("Dano chiquote =%d\n", selecionadas[i].damage);
+                if (enemyController->enemies[j].hp <= 0) {
+                    Enemy_DestroyEnemy(&enemyController->enemies[j]);
+                    EnemyManager_EnemiesDrops(&enemyController->enemies[j]);
+                }
 			}
 		}
 	}
-    
     // Checagem das armas que geram projéteis
     for(int i =0;i<Max_projectiles;i++){
 		if(list_projects[i].active != 1) continue;
@@ -106,7 +107,6 @@ void Collision_EnemyAndWeapon(EnemyManager* enemyController) {
 }
 
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
-
     // Define os lados dos retângulos
     int direito_r1, direito_r2, esquerdo_r1, esquerdo_r2, cima_r1, cima_r2, baixo_r1, baixo_r2;
 
