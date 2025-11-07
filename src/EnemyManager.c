@@ -1,7 +1,5 @@
 #include "EnemyManager.h"
 #include "Experience.h"
-//#include <stdlib.h>
-//#include <time.h>
 
 EnemyManager enemyController = {0};
 
@@ -72,12 +70,6 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren) {
     }
 }
 
-void EnemyManager_EnemiesDrops(Enemy* enemy) {
-    //srand(time(NULL));
-    //int n = rand()
-
-}
-
  float Get_Near_Enemy(EnemyManager* EnemyManager,float *x,float*y,int x0,int y0){
     float best_dis = 9999999;
     for(int i=0;i<MAX_ENEMIES;i++){
@@ -91,6 +83,5 @@ void EnemyManager_EnemiesDrops(Enemy* enemy) {
             *x = x1;
         }
     }
-    printf("O valor de x1 = %f e de y1=%f e dis = %f no Manager \n",*x,*y,best_dis);
     return best_dis;
 }  

@@ -6,10 +6,11 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "Weapons.h"
+#include "ExperienceManager.h"
 
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2); // Detecta colisão entre dois retângulos quaisquer
 void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int* keepRunning); // Detecta colisão entre o jogador e os inimigos
 void Collision_EnemyAndEnemy(EnemyManager* enemyController); // Detecta colisão entre os inimigos
-void Collision_EnemyAndWeapon(EnemyManager* enemyController); // Detecta colisão entre as armas (e seus projéteis) e os inimigos
+void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* xpController); // Detecta colisão entre as armas (e seus projéteis) e os inimigos
 
 #endif

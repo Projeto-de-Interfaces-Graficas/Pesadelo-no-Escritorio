@@ -18,7 +18,6 @@ typedef struct {
     ExperienceType type;
 } ExperiencePoint;
 
-void Experience_CreateXp(ExperiencePoint* xp, ExperienceType type);
-void Experience_RenderXp();
+void Experience_CreateXp(ExperiencePoint* xp, ExperienceType type, int x, int y, int size, SDL_Texture* sprite);
 
 #endif

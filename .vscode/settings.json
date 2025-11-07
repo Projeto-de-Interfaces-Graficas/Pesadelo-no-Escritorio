@@ -2,6 +2,8 @@
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
     "sdl.h": "c",
-    "enemymanager.h": "c"
+    "enemymanager.h": "c",
+    "experience.h": "c",
+    "experiencemanager.h": "c"
   }
 }

@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "Collision.h"
+#include "Experience.h"
+#include "ExperienceManager.h"
 
 #define LARGURA 800
 #define ALTURA 600
@@ -43,11 +45,14 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Uint32 previousTime = SDL_GetTicks();
 	Uint32 currentTime;
 	float deltaTime;
+	ExperienceManager xpController;
 
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
+	ExperienceManager_Init(&xpController, ren, 8);
 	Select_Weapon(ARMA_PROJETIL);
+
 	/* GAME LOOP */
 	while (keepRunning) {
 
@@ -61,6 +66,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		Render_player(ren);
 		EnemyManager_RenderEnemies(&enemyController, ren);
+		ExperienceManager_RenderXp(&xpController, ren);
 		DrawWeapons(ren);
 
 		SDL_RenderPresent(ren);
@@ -77,7 +83,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		delay = 16;
 		EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 		Collision_EnemyAndEnemy(&enemyController);
-		Collision_EnemyAndWeapon(&enemyController);
+		Collision_EnemyAndWeapon(&enemyController, &xpController);
 		
 		/* MOVIMENTAÇÃO DO JOGADOR */
 		float movX = 0, movY = 0;
@@ -85,16 +91,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		if (teclado[SDL_SCANCODE_W]) {
 			movY -= 1;
 		}
-
 		if (teclado[SDL_SCANCODE_A]) {
 			movX -= 1;
 			player.dir = -1;
 		}
-
 		if (teclado[SDL_SCANCODE_S]) {
 			movY += 1;
 		}
-
 		if (teclado[SDL_SCANCODE_D]) {
 			movX += 1;
 			player.dir = 1;
@@ -109,9 +112,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		player.box.x = (int) player.posX;
 		player.box.y = (int) player.posY;
 
-		/* COLLISION CHECKING */
-		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning); // Collision between the player and the enemies
-		
+		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);	
 	}
 }
 

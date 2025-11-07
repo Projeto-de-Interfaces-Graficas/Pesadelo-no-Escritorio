@@ -1,4 +1,5 @@
 #include "Collision.h"
+#include "ExperienceManager.h"
 
 void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int* keepRunning) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
@@ -75,32 +76,40 @@ void Collision_EnemyAndEnemy(EnemyManager* enemyController) {
     }
 }
 
-void Collision_EnemyAndWeapon(EnemyManager* enemyController) {
+void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* xpController) {
+
     // Checagem das armas corpo-a-corpo
-    for(int i =0;i<n_weapons_choices;i++) {
-	    if(selecionadas[i].active != 1) continue;
-		for(int j =0; j<MAX_ENEMIES; j++) {
+    for (int i =0;i<n_weapons_choices;i++) {
+	    if (selecionadas[i].active != 1) continue;
+		for (int j =0; j<MAX_ENEMIES; j++) {
 			if (enemyController->enemies[j].active != 1) continue;
 			if (Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)) {
 				enemyController->enemies[j].hp -= selecionadas[i].damage;
                 if (enemyController->enemies[j].hp <= 0) {
                     Enemy_DestroyEnemy(&enemyController->enemies[j]);
-                    EnemyManager_EnemiesDrops(&enemyController->enemies[j]);
+                    int enemyCenterX = enemyController->enemies[j].box.x + enemyController->enemies[j].box.w / 2;
+                    int enemyCenterY = enemyController->enemies[j].box.y + enemyController->enemies[j].box.h / 2;
+                    ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
                 }
 			}
 		}
 	}
+
     // Checagem das armas que geram projéteis
-    for(int i =0;i<Max_projectiles;i++){
-		if(list_projects[i].active != 1) continue;
-		for(int j =0;j<MAX_ENEMIES;j++){
-			if(enemyController->enemies[j].active != 1) continue;
-			if(Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)){
-				printf("Vida inimigo Antes tiro = %d e dano da arma = %d\n",enemyController->enemies[j].hp,list_projects[i].Weapon->damage);
+    for (int i =0;i<Max_projectiles;i++) {
+		if (list_projects[i].active != 1) continue;
+		for (int j =0;j<MAX_ENEMIES;j++) {
+			if (enemyController->enemies[j].active != 1) continue;
+			if (Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)) {
 				enemyController->enemies[j].hp -= list_projects[i].Weapon->damage;
-				printf("Vida inimigo pois tiro = %d\n",enemyController->enemies[j].hp);
+                if (enemyController->enemies[j].hp <= 0) {
+                    Enemy_DestroyEnemy(&enemyController->enemies[j]);
+                    int enemyCenterX = enemyController->enemies[j].box.x + enemyController->enemies[j].box.w / 2;
+                    int enemyCenterY = enemyController->enemies[j].box.y + enemyController->enemies[j].box.h / 2;
+                    ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
+                }
 				list_projects[i].pierce -= 1;
-				if(list_projects[i].pierce <= 0) list_projects[i].active = 0;
+				if (list_projects[i].pierce <= 0) list_projects[i].active = 0;
 			}
 		}
 	}

@@ -21,7 +21,6 @@ typedef struct {
 void EnemyManager_StartEnemies(EnemyManager* EnemyManager, int spawnInterval);
 void EnemyManager_UpdateEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren, Player player, float deltaTime, float radiusX, float radiusY);
 void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren);
-void EnemyManager_EnemiesDrops(Enemy* enemy);
 float Get_Near_Enemy(EnemyManager* EnemyManager,float *x,float*y,int x0,int y0);
 
 extern EnemyManager enemyController;
