@@ -27,7 +27,7 @@ void Select_Weapon(int tipo)
 	case ARMA_PROJETIL:
 		new_weapon.active = 0;
 		new_weapon.cooldown = 2 * seconds;
-		new_weapon.damage = 1;
+		new_weapon.damage = 5;
 		new_weapon.range = 100;
 		new_weapon.recharging_time = 0;
 		new_weapon.duration = 1 * seconds;
@@ -86,7 +86,6 @@ void Active_Weapon(Arma *arma, int i)
 		y = novo_projetil.box.y;
 		float x1,y1;
 		float dis = Get_Near_Enemy(&enemyController,&x1,&y1,x,y);
-		printf("Dano da arma igual %d\n",novo_projetil.Weapon->damage);
 		novo_projetil.dir_x = x1/dis;
 		novo_projetil.dir_y = y1/dis; 
 		for (int j = 0; j < Max_projectiles; j++)
