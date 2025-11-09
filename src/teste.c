@@ -112,7 +112,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		player.box.x = (int) player.posX;
 		player.box.y = (int) player.posY;
 
-		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);	
+		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
+		Collision_PlayerAndXp(&xpController);	
 	}
 }
 

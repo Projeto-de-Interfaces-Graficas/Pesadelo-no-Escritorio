@@ -121,6 +121,18 @@ void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* 
 	}
 }
 
+void Collision_PlayerAndXp(ExperienceManager* xpController) {
+    for (int i = 0; i < MAX_XP_POINTS; i++) {
+        ExperiencePoint* xp = &xpController->xpPoints[i];
+        if (xp->active) {
+            if (Collision_RectAndRect(&player.box, &xp->hitBox)) {
+                player.xp += xp->amount;
+                xp->active = 0;
+            }
+        }
+    }
+}
+
 int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2) {
     // Define os lados dos retângulos
     int direito_r1, direito_r2, esquerdo_r1, esquerdo_r2, cima_r1, cima_r2, baixo_r1, baixo_r2;

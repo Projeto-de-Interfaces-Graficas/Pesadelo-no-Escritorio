@@ -12,5 +12,6 @@ int Collision_RectAndRect(SDL_Rect* r1, SDL_Rect* r2); // Detecta colisão entre
 void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int* keepRunning); // Detecta colisão entre o jogador e os inimigos
 void Collision_EnemyAndEnemy(EnemyManager* enemyController); // Detecta colisão entre os inimigos
 void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* xpController); // Detecta colisão entre as armas (e seus projéteis) e os inimigos
+void Collision_PlayerAndXp(ExperienceManager* xpController); // Detecta colisão entre o jogador e os pontos de experiência dropados
 
 #endif
