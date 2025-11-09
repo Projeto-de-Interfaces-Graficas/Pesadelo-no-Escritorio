@@ -51,7 +51,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
 	EnemyManager_StartEnemies(&enemyController, 2000);
-	ExperienceManager_Init(&xpController, ren, 8);
+	ExperienceManager_Init(&xpController, ren, 16);
 	Select_Weapon(ARMA_PROJETIL);
 
 	/* GAME LOOP */
