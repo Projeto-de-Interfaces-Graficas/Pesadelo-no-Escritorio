@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 
 /* GAME INICIALIZATION */
 void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
+	srand(time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(0);
 	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
@@ -77,7 +78,6 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
 			}
-
 		}
 
 		delay = 16;

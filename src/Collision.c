@@ -77,36 +77,42 @@ void Collision_EnemyAndEnemy(EnemyManager* enemyController) {
 }
 
 void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* xpController) {
-
+    
     // Checagem das armas corpo-a-corpo
-    for (int i =0;i<n_weapons_choices;i++) {
+    for (int i = 0; i < n_weapons_choices; i++) {
 	    if (selecionadas[i].active != 1) continue;
-		for (int j =0; j<MAX_ENEMIES; j++) {
-			if (enemyController->enemies[j].active != 1) continue;
-			if (Collision_RectAndRect(&enemyController->enemies[j].box,&selecionadas[i].box)) {
-				enemyController->enemies[j].hp -= selecionadas[i].damage;
-                if (enemyController->enemies[j].hp <= 0) {
+		for (int j = 0; j < MAX_ENEMIES; j++) {
+            Enemy* enemy = &enemyController->enemies[j];
+			if (enemy->active != 1) continue;
+			if (Collision_RectAndRect(&enemy->box, &selecionadas[i].box)) {
+				enemy->hp -= selecionadas[i].damage;
+                if (enemy->hp <= 0) {
+                    if (ExperienceManager_DropXp(enemy->xpBaseDropChance, player.luck)) {
+                        int enemyCenterX = enemy->box.x + enemy->box.w / 2;
+                        int enemyCenterY = enemy->box.y + enemy->box.h / 2;
+                        ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
+                    }
                     Enemy_DestroyEnemy(&enemyController->enemies[j]);
-                    int enemyCenterX = enemyController->enemies[j].box.x + enemyController->enemies[j].box.w / 2;
-                    int enemyCenterY = enemyController->enemies[j].box.y + enemyController->enemies[j].box.h / 2;
-                    ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
                 }
 			}
 		}
 	}
 
     // Checagem das armas que geram projéteis
-    for (int i =0;i<Max_projectiles;i++) {
+    for (int i =0; i < Max_projectiles; i++) {
 		if (list_projects[i].active != 1) continue;
-		for (int j =0;j<MAX_ENEMIES;j++) {
-			if (enemyController->enemies[j].active != 1) continue;
-			if (Collision_RectAndRect(&enemyController->enemies[j].box,&list_projects[i].box)) {
-				enemyController->enemies[j].hp -= list_projects[i].Weapon->damage;
-                if (enemyController->enemies[j].hp <= 0) {
+		for (int j = 0; j < MAX_ENEMIES; j++) {
+            Enemy* enemy = &enemyController->enemies[j];
+			if (enemy->active != 1) continue;
+			if (Collision_RectAndRect(&enemy->box, &list_projects[i].box)) {
+				enemy->hp -= list_projects[i].Weapon->damage;
+                if (enemy->hp <= 0) {
+                    if (ExperienceManager_DropXp(enemy->xpBaseDropChance, player.luck)) {
+                        int enemyCenterX = enemy->box.x + enemy->box.w / 2;
+                        int enemyCenterY = enemy->box.y + enemy->box.h / 2;
+                        ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
+                    }
                     Enemy_DestroyEnemy(&enemyController->enemies[j]);
-                    int enemyCenterX = enemyController->enemies[j].box.x + enemyController->enemies[j].box.w / 2;
-                    int enemyCenterY = enemyController->enemies[j].box.y + enemyController->enemies[j].box.h / 2;
-                    ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
                 }
 				list_projects[i].pierce -= 1;
 				if (list_projects[i].pierce <= 0) list_projects[i].active = 0;

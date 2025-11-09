@@ -22,7 +22,7 @@ void Create_player(int i){
     player.invencibility_time = 500;
     player.posX = 384;
     player.posY = 284;
-    player.luck = 100;
+    player.luck = 1;
     Select_Weapon(0);
     break;
     default:

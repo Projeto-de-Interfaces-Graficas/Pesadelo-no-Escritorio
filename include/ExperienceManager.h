@@ -12,6 +12,7 @@ typedef struct {
 } ExperienceManager;
 
 void ExperienceManager_Init(ExperienceManager* xpController, SDL_Renderer* ren, int size);
+int ExperienceManager_DropXp(int baseDropChance, float luckMultiplier);
 void ExperienceManager_CreateXp(ExperienceManager* xpController, ExperienceType type, int x, int y);
 void ExperienceManager_RenderXp(ExperienceManager* xpController, SDL_Renderer* ren);
 void ExperienceManager_Destroy(ExperienceManager* xpController);

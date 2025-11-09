@@ -18,7 +18,8 @@ typedef struct Enemy {
     SDL_Rect box; 
     float posX, posY; 
     int hp, dmg, def; 
-    float spd; 
+    float spd;
+    int xpBaseDropChance; 
     SDL_Texture* sprite; 
     int active; 
 } Enemy;

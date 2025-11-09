@@ -1,5 +1,7 @@
 #include "ExperienceManager.h"
 #include <SDL2/SDL_image.h>
+#include <stdlib.h>
+#include <time.h>
 
 void ExperienceManager_Init(ExperienceManager* xpController, SDL_Renderer* ren, int size) {
     xpController->xpTextures[XP_SMALL] = IMG_LoadTexture(ren, "assets/images/xp-small.png");
@@ -9,6 +11,13 @@ void ExperienceManager_Init(ExperienceManager* xpController, SDL_Renderer* ren, 
     for (int i = 0; i < MAX_XP_POINTS; i++) {
         xpController->xpPoints[i].active = 0;
     }
+}
+
+int ExperienceManager_DropXp(int baseDropChance, float luckMultiplier) {
+    float minimunRollToDrop = baseDropChance * luckMultiplier;
+    int roll = rand() % 100;
+    return roll > minimunRollToDrop;
+    
 }
 
 void ExperienceManager_CreateXp(ExperienceManager* xpController, ExperienceType type, int x, int y) {
