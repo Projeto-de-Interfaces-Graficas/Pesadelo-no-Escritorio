@@ -24,7 +24,7 @@ typedef struct Enemy {
     int active; 
 } Enemy;
 
-void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Renderer* ren);
+void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Texture* sprite);
 void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY, float deltaTime);
 void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy);
 void Enemy_DestroyEnemy(Enemy* enemy);

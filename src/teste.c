@@ -50,7 +50,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
-	EnemyManager_StartEnemies(&enemyController, 2000);
+	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	Select_Weapon(ARMA_PROJETIL);
 
@@ -77,6 +77,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		if (isEvent) {
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
+				EnemyManager_Destroy(&enemyController);
+				ExperienceManager_Destroy(&xpController);
 			}
 		}
 

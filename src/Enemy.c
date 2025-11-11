@@ -1,13 +1,13 @@
 #include "Enemy.h"
 
-void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Renderer* ren) {
+void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float enemyPositionY, SDL_Texture* sprite) {
     // Initializes enemy logical position (float) and render position (int)
     enemy->posX = enemyPositionX;
     enemy->posY = enemyPositionY;
     enemy->box.x = (int) enemyPositionX;
     enemy->box.y = (int) enemyPositionY;
 
-    enemy->active = 1;
+    enemy->sprite = sprite;
     enemy->type = type;
 
     switch (type) {
@@ -19,7 +19,6 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
             enemy->xpBaseDropChance = 50;
             enemy->box.w = 32; 
             enemy->box.h = 32;
-            enemy->sprite = IMG_LoadTexture(ren, "assets/images/lapis.png");
             break;
         case ENEMY_TELEFONE: 
         case ENEMY_IMPRESSORA: 
@@ -27,6 +26,7 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
         case ENEMY_GRAMPEADOR: 
         case ENEMY_FRAGMENTADORA: 
     }
+    enemy->active = 1;
 }
 
 void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY, float deltaTime) {

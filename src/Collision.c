@@ -92,7 +92,7 @@ void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* 
                         int enemyCenterY = enemy->box.y + enemy->box.h / 2;
                         ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
                     }
-                    Enemy_DestroyEnemy(&enemyController->enemies[j]);
+                    enemy->active = 0;
                 }
 			}
 		}
@@ -112,7 +112,7 @@ void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* 
                         int enemyCenterY = enemy->box.y + enemy->box.h / 2;
                         ExperienceManager_CreateXp(xpController, XP_SMALL, enemyCenterX, enemyCenterY);
                     }
-                    Enemy_DestroyEnemy(&enemyController->enemies[j]);
+                    enemy->active = 0;
                 }
 				list_projects[i].pierce -= 1;
 				if (list_projects[i].pierce <= 0) list_projects[i].active = 0;

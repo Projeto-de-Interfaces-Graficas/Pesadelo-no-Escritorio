@@ -85,7 +85,7 @@ void Active_Weapon(Arma *arma, int i)
 		x = novo_projetil.box.x;
 		y = novo_projetil.box.y;
 		float x1,y1;
-		float dis = Get_Near_Enemy(&enemyController,&x1,&y1,x,y);
+		float dis = EnemyManager_GetNearestEnemy(&enemyController,&x1,&y1,x,y);
 		novo_projetil.dir_x = x1/dis;
 		novo_projetil.dir_y = y1/dis; 
 		for (int j = 0; j < Max_projectiles; j++)
