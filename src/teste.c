@@ -46,6 +46,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Uint32 previousTime = SDL_GetTicks();
 	Uint32 currentTime;
 	float deltaTime;
+	int movingUp = 0, movingDown = 0, movingLeft = 0, movingRight = 0;
 	ExperienceManager xpController;
 
 	/* ENTITIES INITIALIZATION */
@@ -79,31 +80,57 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 				keepRunning = 0;
 				EnemyManager_Destroy(&enemyController);
 				ExperienceManager_Destroy(&xpController);
+				break;
 			}
+			if (event.type == SDL_KEYDOWN) {
+				switch (event.key.keysym.sym) {
+					case SDLK_w:
+						movingUp = 1;
+						break;
+					case SDLK_s:
+						movingDown = 1;
+						break;
+					case SDLK_a:
+						movingLeft = 1;
+						player.dir = -1;
+						break;
+					case SDLK_d:
+						movingRight = 1;
+						player.dir = 1;
+						break;
+					default:
+						break;
+				}
+			}
+			if (event.type == SDL_KEYUP) {
+				switch (event.key.keysym.sym) {
+					case SDLK_w:
+						movingUp = 0;
+						break;
+					case SDLK_s:
+						movingDown = 0;
+						break;
+					case SDLK_a:
+						movingLeft = 0;
+						break;
+					case SDLK_d:
+						movingRight = 0;
+						break;
+					default:
+						break;
+				}
+			}			
+		} else {
+			delay = 16;
 		}
 
-		delay = 16;
+		
 		EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 		Collision_EnemyAndEnemy(&enemyController);
 		Collision_EnemyAndWeapon(&enemyController, &xpController);
 		
-		/* MOVIMENTAÇÃO DO JOGADOR */
-		float movX = 0, movY = 0;
-		const Uint8* teclado = SDL_GetKeyboardState(NULL);
-		if (teclado[SDL_SCANCODE_W]) {
-			movY -= 1;
-		}
-		if (teclado[SDL_SCANCODE_A]) {
-			movX -= 1;
-			player.dir = -1;
-		}
-		if (teclado[SDL_SCANCODE_S]) {
-			movY += 1;
-		}
-		if (teclado[SDL_SCANCODE_D]) {
-			movX += 1;
-			player.dir = 1;
-		}
+		float movX = movingRight - movingLeft;
+		float movY = movingDown - movingUp;
 		float len = sqrtf(movX * movX + movY * movY);
 		if (len > 0) {
 			movX /= len;
