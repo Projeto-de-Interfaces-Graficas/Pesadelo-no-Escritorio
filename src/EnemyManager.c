@@ -1,8 +1,6 @@
 #include "EnemyManager.h"
 #include "Experience.h"
 
-EnemyManager enemyController = {0};
-
 void EnemyManager_Init(EnemyManager* EnemyManager, int spawnInterval, SDL_Renderer* ren) {
     EnemyManager->lastSpawnTime = SDL_GetTicks();
     EnemyManager->spawnInterval = spawnInterval;

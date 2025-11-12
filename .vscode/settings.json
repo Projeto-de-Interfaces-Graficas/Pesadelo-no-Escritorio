@@ -4,6 +4,7 @@
     "sdl.h": "c",
     "enemymanager.h": "c",
     "experience.h": "c",
-    "experiencemanager.h": "c"
+    "experiencemanager.h": "c",
+    "math.h": "c"
   }
 }

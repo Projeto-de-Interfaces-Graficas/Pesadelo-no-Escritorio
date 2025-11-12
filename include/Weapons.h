@@ -2,6 +2,7 @@
 #define WEAPONS_H
 
 #include <SDL2/SDL.h>
+#include "EnemyManager.h"
 
 #define seconds 1000
 
@@ -47,10 +48,10 @@ extern Projectiles list_projects[Max_projectiles];
 
 void Select_Weapon(int type);
 
-void Active_Weapon(Arma *arma, int i);
+void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController);
 
 void DrawWeapons(SDL_Renderer *renderer);
 
-void ATT_Duration_Weapon(Uint32 tempo_execucao);
+void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController);
 
 #endif

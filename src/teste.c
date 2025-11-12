@@ -48,6 +48,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	float deltaTime;
 	int movingUp = 0, movingDown = 0, movingLeft = 0, movingRight = 0;
 	ExperienceManager xpController;
+	EnemyManager enemyController;
 
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
@@ -74,7 +75,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		SDL_RenderPresent(ren);
 
 		/* CAPTURA DE EVENTOS */
-		isEvent = AUX_WaitEventTimeoutCount(&event, &delay);
+		isEvent = AUX_WaitEventTimeoutCount(&event, &delay, &enemyController);
 		if (isEvent) {
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;

@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
-int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms) {
+int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms, EnemyManager* enemyController) {
 
     // Captura o erro de ponteiro nulo
     if (ms == NULL) {
@@ -30,7 +30,7 @@ int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms) {
         *ms -= tempo_execucao;
     }
 
-    ATT_Duration_Weapon(tempo_execucao);
+    ATT_Duration_Weapon(tempo_execucao, enemyController);
 
     return resultado;
 }

@@ -47,7 +47,7 @@ void Select_Weapon(int tipo)
 	}
 }
 
-void Active_Weapon(Arma *arma, int i)
+void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController)
 {
 	int x;
 	int y;
@@ -85,7 +85,7 @@ void Active_Weapon(Arma *arma, int i)
 		x = novo_projetil.box.x;
 		y = novo_projetil.box.y;
 		float x1,y1;
-		float dis = EnemyManager_GetNearestEnemy(&enemyController,&x1,&y1,x,y);
+		float dis = EnemyManager_GetNearestEnemy(enemyController,&x1,&y1,x,y);
 		novo_projetil.dir_x = x1/dis;
 		novo_projetil.dir_y = y1/dis; 
 		for (int j = 0; j < Max_projectiles; j++)
@@ -140,7 +140,7 @@ void DrawWeapons(SDL_Renderer *renderer)
 	}
 }
 
-void ATT_Duration_Weapon(Uint32 tempo_execucao)
+void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 {
 	for (int i = 0; i < Max_projectiles; i++)
 	{
@@ -168,7 +168,7 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao)
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
 			{
-				Active_Weapon(&selecionadas[i],i);
+				Active_Weapon(&selecionadas[i],i, enemyController);
 				selecionadas[i].recharging_time = 0;
 			}
 		}

@@ -24,6 +24,5 @@ void EnemyManager_RenderEnemies(EnemyManager* EnemyManager, SDL_Renderer* ren);
 float EnemyManager_GetNearestEnemy(EnemyManager* EnemyManager,float *x,float*y,int x0,int y0);
 void EnemyManager_Destroy(EnemyManager* enemyController);
 
-extern EnemyManager enemyController;
 #endif
 
