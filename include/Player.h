@@ -22,6 +22,7 @@ typedef struct
   float movement_speed;
   float xp;
   float xp_for_level_up;
+  int level;
   float posX, posY;
   float luck;
   Uint32 last_damage_time;

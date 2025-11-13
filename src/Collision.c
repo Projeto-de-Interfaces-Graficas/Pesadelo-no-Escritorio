@@ -99,7 +99,7 @@ void Collision_EnemyAndWeapon(EnemyManager* enemyController, ExperienceManager* 
 	}
 
     // Checagem das armas que geram projéteis
-    for (int i =0; i < Max_projectiles; i++) {
+    for (int i = 0; i < Max_projectiles; i++) {
 		if (list_projects[i].active != 1) continue;
 		for (int j = 0; j < MAX_ENEMIES; j++) {
             Enemy* enemy = &enemyController->enemies[j];
@@ -127,7 +127,11 @@ void Collision_PlayerAndXp(ExperienceManager* xpController) {
         if (xp->active) {
             if (Collision_RectAndRect(&player.box, &xp->hitBox)) {
                 player.xp += xp->amount;
+                printf("XP atual do jogador: %0.f\n", player.xp);
                 xp->active = 0;
+                if (player.xp >= player.xp_for_level_up) {
+                    Levelup();
+                }
             }
         }
     }
