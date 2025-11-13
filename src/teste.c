@@ -17,6 +17,12 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren);
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren);
 void FinishGame(SDL_Window **win, SDL_Renderer **ren);
 
+typedef enum {
+	GAMESTATE_MENUPRINCIPAL,
+	GAMESTATE_JOGO,
+	GAMESTATE_PAUSE
+} GameState;
+
 int main(int argc, char *argv[]) {
 	SDL_Window *window = NULL;
 	SDL_Renderer *renderer = NULL;
@@ -39,6 +45,9 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
 void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 	/* EXECUTION VARIABLES */
+	GameState currentGameState = GAMESTATE_MENUPRINCIPAL;
+	int mainMenuOptionSelected = 0;
+	int pauseMenuOptionSelected = 0;
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
@@ -63,17 +72,6 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		deltaTime = (currentTime - previousTime) / 1000.0f; 
 		previousTime = currentTime;
 
-		/* FRAME BUILDING */
-		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
-		SDL_RenderClear(ren);
-
-		Render_player(ren);
-		EnemyManager_RenderEnemies(&enemyController, ren);
-		ExperienceManager_RenderXp(&xpController, ren);
-		DrawWeapons(ren);
-
-		SDL_RenderPresent(ren);
-
 		/* CAPTURA DE EVENTOS */
 		isEvent = AUX_WaitEventTimeoutCount(&event, &delay, &enemyController);
 		if (isEvent) {
@@ -83,67 +81,145 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 				ExperienceManager_Destroy(&xpController);
 				break;
 			}
-			if (event.type == SDL_KEYDOWN) {
-				switch (event.key.keysym.sym) {
-					case SDLK_w:
-						movingUp = 1;
-						break;
-					case SDLK_s:
-						movingDown = 1;
-						break;
-					case SDLK_a:
-						movingLeft = 1;
-						player.dir = -1;
-						break;
-					case SDLK_d:
-						movingRight = 1;
-						player.dir = 1;
-						break;
-					default:
-						break;
-				}
-			}
-			if (event.type == SDL_KEYUP) {
-				switch (event.key.keysym.sym) {
-					case SDLK_w:
-						movingUp = 0;
-						break;
-					case SDLK_s:
-						movingDown = 0;
-						break;
-					case SDLK_a:
-						movingLeft = 0;
-						break;
-					case SDLK_d:
-						movingRight = 0;
-						break;
-					default:
-						break;
-				}
+			switch (currentGameState) {
+				// Eventos relacionados ao menu principal do jogo
+				case GAMESTATE_MENUPRINCIPAL:
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							case SDLK_UP:
+								mainMenuOptionSelected = (mainMenuOptionSelected + 1) % 2;
+								break;
+							case SDLK_DOWN:
+								mainMenuOptionSelected = (mainMenuOptionSelected + 1) % 2;
+								break;
+							case SDLK_RETURN:
+								if (mainMenuOptionSelected == 1) {
+									currentGameState = GAMESTATE_JOGO;
+								} else {
+									keepRunning = 0;
+								}
+								break;
+							default:
+								break;
+						}
+					}
+					break;
+				// Eventos relacionados ao jogo em si
+				case GAMESTATE_JOGO:
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							case SDLK_w: 
+								movingUp = 1; 
+								break;
+							case SDLK_s: 
+								movingDown = 1; 
+								break;
+							case SDLK_a: 
+								movingLeft = 1; 
+								player.dir = -1; 
+								break;
+							case SDLK_d: 
+								movingRight = 1; 
+								player.dir = 1; 
+								break;
+							case SDLK_ESCAPE: 
+								currentGameState = GAMESTATE_PAUSE; 
+								break;
+							default: 
+								break;
+						}
+					}
+					if (event.type == SDL_KEYUP) {
+						switch (event.key.keysym.sym) {
+							case SDLK_w: 
+								movingUp = 0; 
+								break;
+							case SDLK_s: 
+								movingDown = 0; 
+								break;
+							case SDLK_a: 
+								movingLeft = 0; 
+								break;
+							case SDLK_d: 
+								movingRight = 0; 
+								break;
+							default: 
+								break;
+						}
+					}
+					break;
+				// Eventos relacionados ao menu de pausa do jogo
+				case GAMESTATE_PAUSE:
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							case SDLK_UP:
+								pauseMenuOptionSelected = (pauseMenuOptionSelected + 1) % 3;
+								break;
+							case SDLK_DOWN:
+								pauseMenuOptionSelected = (pauseMenuOptionSelected + 1) % 3;
+								break;
+							case SDLK_RETURN:
+								if (pauseMenuOptionSelected == 0) {
+									currentGameState = GAMESTATE_JOGO;
+								} else if (pauseMenuOptionSelected == 1) {
+									currentGameState = GAMESTATE_MENUPRINCIPAL;
+								} else {
+									keepRunning = 0;
+								}
+								break;
+							case SDLK_ESCAPE:
+								currentGameState = GAMESTATE_JOGO;
+								break;
+							default:
+								break;
+						}
+					}
+					break;
+				default:
+					break;
 			}			
 		} else {
 			delay = 16;
 		}
 
-		
-		EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
-		Collision_EnemyAndEnemy(&enemyController);
-		Collision_EnemyAndWeapon(&enemyController, &xpController);
-		
-		float movX = movingRight - movingLeft;
-		float movY = movingDown - movingUp;
-		float len = sqrtf(movX * movX + movY * movY);
-		if (len > 0) {
-			movX /= len;
-			movY /= len;
-		}
-		player.posX += movX * player.movement_speed * deltaTime;
-		player.posY += movY * player.movement_speed * deltaTime;
-		player.box.x = (int) player.posX;
-		player.box.y = (int) player.posY;
+		/* RENDERIZAÇÃO */
+		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+		SDL_RenderClear(ren);
 
-		Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
-		Collision_PlayerAndXp(&xpController);	
+		if (currentGameState == GAMESTATE_MENUPRINCIPAL) {
+			SDL_Rect backgroundImageBox = {0, 0, 800, 600};
+			SDL_Texture* backgroundImage = IMG_LoadTexture(ren, "assets/images/tela-inicial-placeholder.png");
+			SDL_RenderCopy(ren, backgroundImage, NULL, &backgroundImageBox);
+		}
+
+		if (currentGameState == GAMESTATE_JOGO) {
+			// Renderização dos objetos do jogo
+			Render_player(ren);
+			EnemyManager_RenderEnemies(&enemyController, ren);
+			ExperienceManager_RenderXp(&xpController, ren);
+			DrawWeapons(ren);
+
+			// Atualização dos objetos do jogo
+			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
+			Collision_EnemyAndEnemy(&enemyController);
+			Collision_EnemyAndWeapon(&enemyController, &xpController);
+
+			float movX = movingRight - movingLeft;
+			float movY = movingDown - movingUp;
+			float len = sqrtf(movX * movX + movY * movY);
+			if (len > 0) {
+				movX /= len;
+				movY /= len;
+			}
+			player.posX += movX * player.movement_speed * deltaTime;
+			player.posY += movY * player.movement_speed * deltaTime;
+			player.box.x = (int) player.posX;
+			player.box.y = (int) player.posY;
+			Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
+			Collision_PlayerAndXp(&xpController);
+		}
+
+		SDL_RenderPresent(ren);
 	}
 }
 
