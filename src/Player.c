@@ -15,6 +15,7 @@ void Create_player(int i){
     player.xp = 0;
     player.xp_for_level_up = 5;
     player.level = 1;
+    player.has_leveled_up = 0;
     player.box.x = 384;
     player.box.y = 284;
     player.box.w = 32;
@@ -46,8 +47,6 @@ void Get_xp(float xp){
 }
 
 void Levelup(){
-  printf("Nível atual do jogador: %d\n", player.level);
-  printf("Qtd. atual de xp necessária para subir de nível: %.0f\n", player.xp_for_level_up);
   if (player.level <= 20) {
     player.xp_for_level_up += 10;
   } else if (player.level <= 40) {
@@ -57,8 +56,7 @@ void Levelup(){
   }
   player.level += 1;
   player.xp = 0;
-  printf("Nível do jogador após o level up: %d\n", player.level);
-  printf("Qtd. de xp necessária para subir de nível após o level up: %.0f\n", player.xp_for_level_up);
+  player.has_leveled_up = 1;
 }
 
 void Render_player(SDL_Renderer *renderer){

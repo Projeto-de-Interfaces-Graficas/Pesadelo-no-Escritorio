@@ -20,7 +20,8 @@ void FinishGame(SDL_Window **win, SDL_Renderer **ren);
 typedef enum {
 	GAMESTATE_MENUPRINCIPAL,
 	GAMESTATE_JOGO,
-	GAMESTATE_PAUSE
+	GAMESTATE_PAUSE,
+	GAMESTATE_LEVELUP
 } GameState;
 
 int main(int argc, char *argv[]) {
@@ -48,6 +49,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	GameState currentGameState = GAMESTATE_MENUPRINCIPAL;
 	int mainMenuOptionSelected = 0;
 	int pauseMenuOptionSelected = 0;
+	int levelUpMenuOptionSelected = 0;
 	SDL_Event event;
 	int keepRunning = 1;
 	Uint32 delay = 16;
@@ -175,6 +177,24 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 						}
 					}
 					break;
+				// Eventos relacionados ao menu de escolha de aprimoramentos ao subir de nível
+				case GAMESTATE_LEVELUP:
+					if (event.type == SDL_KEYDOWN) {
+						switch (event.key.keysym.sym) {
+							case SDLK_LEFT:
+								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 1) % 3;
+								break;
+							case SDLK_RIGHT:
+								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 1) % 3;
+								break;
+							case SDLK_RETURN:
+								printf("Você escolheu o upgrade %d\n", levelUpMenuOptionSelected + 1);
+								currentGameState = GAMESTATE_JOGO;
+								break;
+							default:
+								break;
+						}
+					}
 				default:
 					break;
 			}			
@@ -217,6 +237,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			player.box.y = (int) player.posY;
 			Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
 			Collision_PlayerAndXp(&xpController);
+			if (player.has_leveled_up) {
+				player.has_leveled_up = 0;
+				currentGameState = GAMESTATE_LEVELUP;
+			}
 		}
 
 		SDL_RenderPresent(ren);
