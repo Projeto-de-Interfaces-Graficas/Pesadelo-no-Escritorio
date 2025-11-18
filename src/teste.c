@@ -9,6 +9,9 @@
 #include "Collision.h"
 #include "Experience.h"
 #include "ExperienceManager.h"
+#include "Menus.h"
+#include<SDL2/SDL_ttf.h>
+
 
 #define LARGURA 800
 #define ALTURA 600
@@ -38,6 +41,7 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
 	srand(time(NULL));
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(0);
+	TTF_Init();
 	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
 	*ren = SDL_CreateRenderer(*win, -1, 0);
 }
@@ -218,6 +222,8 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			SDL_Rect backgroundImageBox = {0, 0, 800, 600};
 			SDL_Texture* backgroundImage = IMG_LoadTexture(ren, "assets/images/tela-inicial-placeholder.png");
 			SDL_RenderCopy(ren, backgroundImage, NULL, &backgroundImageBox);
+			RenderStartMenu(ren,mainMenuOptionSelected);
+
 		}
 
 		if (currentGameState == GAMESTATE_JOGO) {
