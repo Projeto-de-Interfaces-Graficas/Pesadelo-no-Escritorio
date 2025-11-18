@@ -52,6 +52,6 @@ void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController);
 
 void DrawWeapons(SDL_Renderer *renderer);
 
-void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController);
+void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController);
 
 #endif

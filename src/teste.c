@@ -231,7 +231,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 			Collision_EnemyAndEnemy(&enemyController);
 			Collision_EnemyAndWeapon(&enemyController, &xpController);
-
+			Update_Weapon(deltaTime*1000.0f,&enemyController);
 			float movX = movingRight - movingLeft;
 			float movY = movingDown - movingUp;
 			float len = sqrtf(movX * movX + movY * movY);

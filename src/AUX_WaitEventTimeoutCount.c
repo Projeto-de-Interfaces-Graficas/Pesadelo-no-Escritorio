@@ -29,8 +29,5 @@ int AUX_WaitEventTimeoutCount(SDL_Event* evt, Uint32* ms, EnemyManager* enemyCon
     else {
         *ms -= tempo_execucao;
     }
-
-    ATT_Duration_Weapon(tempo_execucao, enemyController);
-
     return resultado;
 }

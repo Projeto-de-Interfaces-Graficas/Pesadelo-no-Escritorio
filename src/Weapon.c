@@ -26,7 +26,7 @@ void Select_Weapon(int tipo)
 		break;
 	case ARMA_PROJETIL:
 		new_weapon.active = 0;
-		new_weapon.cooldown = 2 * seconds;
+		new_weapon.cooldown = 4 * seconds;
 		new_weapon.damage = 5;
 		new_weapon.range = 100;
 		new_weapon.recharging_time = 0;
@@ -110,18 +110,6 @@ void DrawWeapons(SDL_Renderer *renderer)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &selecionadas[i].box);
-			if (selecionadas[i].tipo == ARMA_CHICOTE)
-			{
-				if (player.dir == -1)
-			{
-				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2) - selecionadas[0].box.w;
-			}
-			else
-			{
-				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
-			}
-				selecionadas[0].box.y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
-			}
 		}
 	}
 	for (int i = 0; i < Max_projectiles; i++)
@@ -130,17 +118,11 @@ void DrawWeapons(SDL_Renderer *renderer)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_RenderFillRect(renderer, &list_projects[i].box);
-			if (list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
-			{
-				list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
-				list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
-				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
-			}
 		}
 	}
 }
 
-void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
+void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 {
 	for (int i = 0; i < Max_projectiles; i++)
 	{
@@ -150,6 +132,12 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 			if (list_projects[i].is_on_screen >= list_projects[i].Weapon->duration)
 			{
 				list_projects[i].active = 0;
+			}
+			if(list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
+			{
+				list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
+				list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
+				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
 			}
 		}
 	}
@@ -161,6 +149,18 @@ void ATT_Duration_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 			if (selecionadas[i].is_on_screen >= selecionadas[i].duration)
 			{
 				selecionadas[i].active = 0;
+			}
+			if (selecionadas[i].tipo == ARMA_CHICOTE)
+			{
+				if (player.dir == -1)
+			{
+				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2) - selecionadas[0].box.w;
+			}
+			else
+			{
+				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
+			}
+				selecionadas[0].box.y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
 			}
 		}
 		else if (selecionadas[i].active == 0)
