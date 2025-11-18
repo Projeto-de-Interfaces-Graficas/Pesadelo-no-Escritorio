@@ -152,6 +152,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 					break;
 				// Eventos relacionados ao menu de pausa do jogo
 				case GAMESTATE_PAUSE:
+					movingUp = 0;
+					movingDown = 0;
+					movingRight = 0;
+					movingLeft = 0;
 					if (event.type == SDL_KEYDOWN) {
 						switch (event.key.keysym.sym) {
 							case SDLK_UP:
@@ -179,6 +183,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 					break;
 				// Eventos relacionados ao menu de escolha de aprimoramentos ao subir de nível
 				case GAMESTATE_LEVELUP:
+					movingUp = 0;
+					movingDown = 0;
+					movingRight = 0;
+					movingLeft = 0;
 					if (event.type == SDL_KEYDOWN) {
 						switch (event.key.keysym.sym) {
 							case SDLK_LEFT:
