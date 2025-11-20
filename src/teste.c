@@ -44,6 +44,7 @@ void InitializeGame(SDL_Window **win, SDL_Renderer **ren) {
 	TTF_Init();
 	*win = SDL_CreateWindow("Pesadelo no Escritório", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, LARGURA, ALTURA, 0);
 	*ren = SDL_CreateRenderer(*win, -1, 0);
+	SDL_SetRenderDrawBlendMode(*ren, SDL_BLENDMODE_BLEND);
 }
 
 /* GAME EXECUTION */
@@ -70,6 +71,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	Select_Weapon(ARMA_PROJETIL);
+	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/tela-inicial-placeholder.png");
 
 	/* GAME LOOP */
 	while (keepRunning) {
@@ -215,15 +217,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		}
 
 		/* RENDERIZAÇÃO */
-		SDL_SetRenderDrawColor(ren, 255, 255, 255, 0);
+		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
 
 		if (currentGameState == GAMESTATE_MENUPRINCIPAL) {
-			SDL_Rect backgroundImageBox = {0, 0, 800, 600};
-			SDL_Texture* backgroundImage = IMG_LoadTexture(ren, "assets/images/tela-inicial-placeholder.png");
-			SDL_RenderCopy(ren, backgroundImage, NULL, &backgroundImageBox);
-			RenderStartMenu(ren,mainMenuOptionSelected);
-
+			SDL_Rect mainMenuBackgroundImageBox = {0, 0, 800, 600};
+			SDL_RenderCopy(ren, mainMenuBackgroundImage, NULL, &mainMenuBackgroundImageBox);
+			RenderStartMenu(ren, mainMenuOptionSelected);
 		}
 
 		if (currentGameState == GAMESTATE_JOGO) {
@@ -255,6 +255,21 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 				player.has_leveled_up = 0;
 				currentGameState = GAMESTATE_LEVELUP;
 			}
+		}
+
+		if (currentGameState == GAMESTATE_PAUSE) {
+			Render_player(ren);
+			EnemyManager_RenderEnemies(&enemyController, ren);
+			ExperienceManager_RenderXp(&xpController, ren);
+			DrawWeapons(ren);
+
+			SDL_SetRenderDrawColor(ren, 0, 0, 0, 150);
+			SDL_Rect pauseEffect = {0, 0, 800, 600};
+			SDL_RenderFillRect(ren, &pauseEffect);	
+		}
+
+		if (currentGameState == GAMESTATE_LEVELUP) {
+			continue;
 		}
 
 		SDL_RenderPresent(ren);
