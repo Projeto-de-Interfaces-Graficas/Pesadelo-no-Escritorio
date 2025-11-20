@@ -52,7 +52,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 	/* EXECUTION VARIABLES */
 	GameState currentGameState = GAMESTATE_MENUPRINCIPAL;
-	int mainMenuOptionSelected = 0;
+	int mainMenuOptionSelected = 1;
 	int pauseMenuOptionSelected = 0;
 	int levelUpMenuOptionSelected = 0;
 	SDL_Event event;
@@ -280,6 +280,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 	SDL_DestroyRenderer(*ren);
 	SDL_DestroyWindow(*win);
+	SDL_DestroyTexture(cardTexture);
 	IMG_Quit();
 	SDL_Quit();
 }
