@@ -10,6 +10,7 @@
 #include "Experience.h"
 #include "ExperienceManager.h"
 #include "Menus.h"
+#include "UpgradeManager.h"
 #include<SDL2/SDL_ttf.h>
 
 
@@ -65,11 +66,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	int movingUp = 0, movingDown = 0, movingLeft = 0, movingRight = 0;
 	ExperienceManager xpController;
 	EnemyManager enemyController;
+	UpgradeManager upController;
 
 	/* ENTITIES INITIALIZATION */
 	Create_player(Comum);
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
+	UpgradeManager_Init(&upController, ren);
 	Select_Weapon(ARMA_PROJETIL);
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 
@@ -203,6 +206,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 								break;
 							case SDLK_RETURN:
 								printf("Você escolheu o upgrade %d\n", levelUpMenuOptionSelected + 1);
+								UpgradeManager_Apply(upController.selectedUpgrades[levelUpMenuOptionSelected]);
 								currentGameState = GAMESTATE_JOGO;
 								break;
 							default:
@@ -253,6 +257,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			Collision_PlayerAndXp(&xpController);
 			if (player.has_leveled_up) {
 				player.has_leveled_up = 0;
+				UpgradeManager_SelectUpgrades(&upController);
 				currentGameState = GAMESTATE_LEVELUP;
 			}
 		}
@@ -269,7 +274,9 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		}
 
 		if (currentGameState == GAMESTATE_LEVELUP) {
-			continue;
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[0], 20, 150);
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[1], 280, 150);
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[2], 540, 150);
 		}
 
 		SDL_RenderPresent(ren);
@@ -283,4 +290,3 @@ void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 	IMG_Quit();
 	SDL_Quit();
 }
-
