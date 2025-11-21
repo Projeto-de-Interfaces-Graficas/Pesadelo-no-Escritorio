@@ -4,9 +4,9 @@
 #include <time.h>
 
 void ExperienceManager_Init(ExperienceManager* xpController, SDL_Renderer* ren, int size) {
-    xpController->xpTextures[XP_SMALL] = IMG_LoadTexture(ren, "assets/images/xp-small.png");
-    xpController->xpTextures[XP_MEDIUM] = IMG_LoadTexture(ren, "assets/images/xp-medium.png");
-    xpController->xpTextures[XP_LARGE] = IMG_LoadTexture(ren, "assets/images/xp-large.png");
+    xpController->xpTextures[XP_SMALL] = IMG_LoadTexture(ren, "assets/images/xp/xp-small.png");
+    xpController->xpTextures[XP_MEDIUM] = IMG_LoadTexture(ren, "assets/images/xp/xp-medium.png");
+    xpController->xpTextures[XP_LARGE] = IMG_LoadTexture(ren, "assets/images/xp/xp-large.png");
     xpController->xpSpriteSize = size;
     for (int i = 0; i < MAX_XP_POINTS; i++) {
         xpController->xpPoints[i].active = 0;

@@ -71,7 +71,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	Select_Weapon(ARMA_PROJETIL);
-	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/tela-inicial-placeholder.png");
+	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 
 	/* GAME LOOP */
 	while (keepRunning) {
@@ -280,7 +280,6 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 void FinishGame(SDL_Window **win, SDL_Renderer **ren) {
 	SDL_DestroyRenderer(*ren);
 	SDL_DestroyWindow(*win);
-	SDL_DestroyTexture(cardTexture);
 	IMG_Quit();
 	SDL_Quit();
 }

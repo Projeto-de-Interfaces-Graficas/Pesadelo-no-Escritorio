@@ -4,7 +4,7 @@
 void EnemyManager_Init(EnemyManager* EnemyManager, int spawnInterval, SDL_Renderer* ren) {
     EnemyManager->lastSpawnTime = SDL_GetTicks();
     EnemyManager->spawnInterval = spawnInterval;
-    EnemyManager->enemiesTextures[ENEMY_LAPIS] = IMG_LoadTexture(ren, "assets/images/lapis.png");
+    EnemyManager->enemiesTextures[ENEMY_LAPIS] = IMG_LoadTexture(ren, "assets/images/enemies/lapis.png");
     for (int i = 0; i < MAX_ENEMIES; i++) {
         EnemyManager->enemies[i].active = 0;
     }
