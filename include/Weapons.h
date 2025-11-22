@@ -26,6 +26,7 @@ typedef struct
 	Uint32 is_on_screen;
 	int active;
 	SDL_Rect box;
+	int active_max;
 }Arma;
 
 typedef struct{
@@ -53,5 +54,9 @@ void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController);
 void DrawWeapons(SDL_Renderer *renderer);
 
 void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController);
+
+void Upgrade_Weapon(Arma* arma, int upgrade_type);
+
+int Get_Weapon_index(ArmaTipo tipo);
 
 #endif

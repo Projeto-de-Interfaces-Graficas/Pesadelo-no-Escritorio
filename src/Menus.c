@@ -17,9 +17,17 @@ void RenderStartMenu(SDL_Renderer *ren,int state){
 
     SDL_Texture *starttxt = SDL_CreateTextureFromSurface(ren,start); 
     SDL_Texture *quittxt = SDL_CreateTextureFromSurface(ren,quit);
+
+    SDL_FreeSurface(start);
+    SDL_FreeSurface(quit);
+
     SDL_Rect r1={340,200,120,100}; 
     SDL_Rect r2={350,300,100,100};
 
     SDL_RenderCopy(ren,starttxt,NULL,&r1);
     SDL_RenderCopy(ren,quittxt,NULL,&r2);
+
+    SDL_DestroyTexture(starttxt);
+    SDL_DestroyTexture(quittxt);
+    TTF_CloseFont(fnt);
 }

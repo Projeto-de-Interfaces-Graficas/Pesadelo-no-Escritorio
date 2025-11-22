@@ -3,7 +3,6 @@
 #include <Player.h>
 #include <EnemyManager.h>
 
-
 int n_weapons_choices = 0;
 
 Arma selecionadas[Max_Weapons];
@@ -23,9 +22,11 @@ void Select_Weapon(int tipo)
 		new_weapon.recharging_time = 0;
 		new_weapon.tipo = ARMA_CHICOTE;
 		new_weapon.active = 0;
+		new_weapon.active_max = 1;
 		break;
 	case ARMA_PROJETIL:
 		new_weapon.active = 0;
+		new_weapon.active_max = 1;
 		new_weapon.cooldown = 4 * seconds;
 		new_weapon.damage = 5;
 		new_weapon.range = 100;
@@ -47,7 +48,7 @@ void Select_Weapon(int tipo)
 	}
 }
 
-void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController)
+void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 {
 	int x;
 	int y;
@@ -65,35 +66,36 @@ void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController)
 			x = (player.box.x + (player.box.w) / 2);
 		}
 		selecionadas[i].box.x = x;
-		y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h/2;
+		y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
 		selecionadas[i].box.y = y;
-		selecionadas[i].active = 1;
+		selecionadas[i].active = selecionadas[i].active_max;
 		selecionadas[i].is_on_screen = 0;
 		break;
 	case ARMA_PROJETIL:
-		Projectiles novo_projetil;
-		novo_projetil.is_on_screen = 0;
-		novo_projetil.box.x = (player.box.x + (player.box.w) / 2);
-		novo_projetil.box.y = (player.box.y + (player.box.h) / 2);
-		novo_projetil.box.w = 10;
-		novo_projetil.box.h = 10;
-		novo_projetil.active = 1;
-		novo_projetil.pierce = 1;
-		novo_projetil.Weapon = arma;
-
-		novo_projetil.speed = 10;
-		x = novo_projetil.box.x;
-		y = novo_projetil.box.y;
-		float x1,y1;
-		float dis = EnemyManager_GetNearestEnemy(enemyController,&x1,&y1,x,y);
-		novo_projetil.dir_x = x1/dis;
-		novo_projetil.dir_y = y1/dis; 
-		for (int j = 0; j < Max_projectiles; j++)
-		{
-			if (list_projects[j].active != 1)
+		for(int i = 0; i< arma->active_max;i++){
+			Projectiles novo_projetil;
+			novo_projetil.is_on_screen = 0;
+			novo_projetil.box.x = (player.box.x + (player.box.w) / 2) + i*10;
+			novo_projetil.box.y = (player.box.y + (player.box.h) / 2) + i*10;
+			novo_projetil.box.w = 10;
+			novo_projetil.box.h = 10;
+			novo_projetil.active = 1;
+			novo_projetil.pierce = 1;
+			novo_projetil.Weapon = arma;
+			novo_projetil.speed = 10;
+			x = novo_projetil.box.x;
+			y = novo_projetil.box.y;
+			float x1, y1;
+			float dis = EnemyManager_GetNearestEnemy(enemyController, &x1, &y1, x, y);
+			novo_projetil.dir_x = x1 / dis;
+			novo_projetil.dir_y = y1 / dis;
+			for (int j = 0; j < Max_projectiles; j++)
 			{
-				list_projects[j] = novo_projetil;
-				break;
+				if (list_projects[j].active != 1)
+				{
+					list_projects[j] = novo_projetil;
+					break;
+				}
 			}
 		}
 		break;
@@ -122,7 +124,7 @@ void DrawWeapons(SDL_Renderer *renderer)
 	}
 }
 
-void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
+void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 {
 	for (int i = 0; i < Max_projectiles; i++)
 	{
@@ -131,9 +133,9 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 			list_projects[i].is_on_screen += tempo_execucao;
 			if (list_projects[i].is_on_screen >= list_projects[i].Weapon->duration)
 			{
-				list_projects[i].active = 0;
+				list_projects[i].active -= 1;
 			}
-			if(list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
+			if (list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
 			{
 				list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
 				list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
@@ -148,18 +150,18 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 			selecionadas[i].is_on_screen += tempo_execucao;
 			if (selecionadas[i].is_on_screen >= selecionadas[i].duration)
 			{
-				selecionadas[i].active = 0;
+				selecionadas[i].active -= 1;
 			}
 			if (selecionadas[i].tipo == ARMA_CHICOTE)
 			{
 				if (player.dir == -1)
-			{
-				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2) - selecionadas[0].box.w;
-			}
-			else
-			{
-				selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
-			}
+				{
+					selecionadas[0].box.x = (player.box.x + (player.box.w) / 2) - selecionadas[0].box.w;
+				}
+				else
+				{
+					selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
+				}
 				selecionadas[0].box.y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
 			}
 		}
@@ -168,9 +170,75 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager* enemyController)
 			selecionadas[i].recharging_time += tempo_execucao;
 			if (selecionadas[i].recharging_time >= selecionadas[i].cooldown)
 			{
-				Active_Weapon(&selecionadas[i],i, enemyController);
+				Active_Weapon(&selecionadas[i], i, enemyController);
 				selecionadas[i].recharging_time = 0;
 			}
 		}
 	}
+}
+
+void Upgrade_Weapon(Arma *arma, int upgrade_type)
+{
+	ArmaTipo armatype = arma->tipo;
+	switch (upgrade_type)
+	{
+	case 1: // Cooldown
+		switch (armatype)
+		{
+		case ARMA_CHICOTE:
+			arma->cooldown -= 0.05 * seconds;
+			break;
+		case ARMA_PROJETIL:
+			arma->cooldown -= 0.1 * seconds;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 2: // Damage
+		switch (armatype)
+		{
+		case ARMA_CHICOTE:
+			arma->damage += 5;
+			break;
+		case ARMA_PROJETIL:
+			arma->damage += 1;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 3: // Duration
+		break;
+	case 4: // Range
+		switch (armatype)
+		{
+		case ARMA_CHICOTE:
+			arma->range += 5;
+			break;
+		default:
+			break;
+		}
+		break;
+	case 5: // Active
+		switch (armatype)
+		{
+		case ARMA_PROJETIL:
+			arma->active_max += 1; 
+			break;
+		
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+int Get_Weapon_index(ArmaTipo tipo){
+	for(int i =0; i<Max_Weapons;i++){
+		if(selecionadas[i].tipo == tipo) return i;
+	}
+	return -1;
 }
