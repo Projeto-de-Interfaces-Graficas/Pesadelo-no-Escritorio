@@ -1,10 +1,9 @@
 #include "UpgradeManager.h"
 #include "Player.h"
 #include "Weapons.h"
+#include "Fonts.h"
 
 void UpgradeManager_Init(UpgradeManager* upController, SDL_Renderer* ren) {
-    upController->upgradeTitleFont = TTF_OpenFont("assets/fonts/VT323/VT323-Regular.ttf", 50);
-    upController->upgradeDescriptionFont = TTF_OpenFont("assets/fonts/VT323/VT323-Regular.ttf", 15);
     upController->upgradeCount = 10;
     upController->upgradeCardTexture = IMG_LoadTexture(ren, "assets/images/menus/upgrade-option.png");
     upController->allUpgrades[0] = (Upgrade) {
@@ -130,7 +129,7 @@ void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upContr
 
     // Título
     int titleMaxW = 160, titleMaxH = 40;
-    TTF_Font* titleFont = FitTextInRect("assets/fonts/VT323/VT323-Regular.ttf", upgrade->title, titleMaxW, titleMaxH, 50);
+    TTF_Font* titleFont = Fonts_FitTextInRect(upgrade->title, titleMaxW, titleMaxH, 50);
     SDL_Surface* titleSurface = TTF_RenderUTF8_Blended_Wrapped(titleFont, upgrade->title, textColor, titleMaxW);
     SDL_Texture* titleTexture = SDL_CreateTextureFromSurface(ren, titleSurface);
     int titleBoxX = (x + 40) + (titleMaxW - titleSurface->w) / 2;
@@ -139,11 +138,10 @@ void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upContr
     SDL_RenderCopy(ren, titleTexture, NULL, &titleBox);
     SDL_FreeSurface(titleSurface);
     SDL_DestroyTexture(titleTexture);
-    TTF_CloseFont(titleFont);
 
     // Descrição
     int descriptionMaxW = 160, descriptionMaxH = 130;
-    TTF_Font* descriptionFont = FitTextInRect("assets/fonts/VT323/VT323-Regular.ttf", upgrade->description, descriptionMaxW, descriptionMaxH, 18);
+    TTF_Font* descriptionFont = Fonts_FitTextInRect(upgrade->description, descriptionMaxW, descriptionMaxH, 50);
     SDL_Surface* descriptionSurface = TTF_RenderUTF8_Blended_Wrapped(descriptionFont, upgrade->description, textColor, descriptionMaxW);
     SDL_Texture* descriptionTexture = SDL_CreateTextureFromSurface(ren, descriptionSurface);
     int descriptionBoxX = (x + 40) + (descriptionMaxW - descriptionSurface->w) / 2;
@@ -152,24 +150,4 @@ void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upContr
     SDL_RenderCopy(ren, descriptionTexture, NULL, &descriptionBox);
     SDL_FreeSurface(descriptionSurface);
     SDL_DestroyTexture(descriptionTexture);
-    TTF_CloseFont(descriptionFont);
-}
-
-
-TTF_Font* FitTextInRect(const char* fontPath, const char* text, int maxW, int maxH, int initialSize) {
-    int fontSize = initialSize;
-    TTF_Font* font = TTF_OpenFont(fontPath, fontSize);
-    SDL_Color color = {0x00, 0x00, 0x00, 0xFF};
-    while (fontSize > 8) {
-        SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, maxW);
-        if (surface->w <= maxW && surface->h <= maxH) {
-            SDL_FreeSurface(surface);
-            break;
-        }
-        SDL_FreeSurface(surface);
-        TTF_CloseFont(font);
-        fontSize--;
-        font = TTF_OpenFont(fontPath, fontSize);
-    }
-    return font;
 }

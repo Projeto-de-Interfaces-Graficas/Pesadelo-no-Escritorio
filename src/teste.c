@@ -11,8 +11,8 @@
 #include "ExperienceManager.h"
 #include "Menus.h"
 #include "UpgradeManager.h"
+#include "Fonts.h"
 #include<SDL2/SDL_ttf.h>
-
 
 #define LARGURA 800
 #define ALTURA 600
@@ -73,6 +73,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	UpgradeManager_Init(&upController, ren);
+	Fonts_Init("assets/fonts/VT323/VT323-Regular.ttf");
 	Select_Weapon(ARMA_PROJETIL);
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 
@@ -88,10 +89,6 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		if (isEvent) {
 			if (event.type == SDL_QUIT) {
 				keepRunning = 0;
-				EnemyManager_Destroy(&enemyController);
-				ExperienceManager_Destroy(&xpController);
-				UpgradeManager_Destroy(&upController);
-				break;
 			}
 			switch (currentGameState) {
 				// Eventos relacionados ao menu principal do jogo
@@ -290,6 +287,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		}
 
 		SDL_RenderPresent(ren);
+
+		if (!keepRunning) {
+			EnemyManager_Destroy(&enemyController);
+			ExperienceManager_Destroy(&xpController);
+			UpgradeManager_Destroy(&upController);
+			Fonts_Destroy();
+		}
 	}
 }
 
