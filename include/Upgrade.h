@@ -5,7 +5,7 @@
 
 typedef struct {
     int id;
-    const char* name;
+    const char* title;
     const char* description;
     SDL_Texture* icon;
 } Upgrade;

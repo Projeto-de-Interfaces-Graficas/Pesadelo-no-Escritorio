@@ -22,5 +22,6 @@ void UpgradeManager_Destroy(UpgradeManager* upController);
 void UpgradeManager_SelectUpgrades(UpgradeManager* upController);
 void UpgradeManager_Apply(Upgrade* up);
 void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upController, Upgrade* up, int x, int y);
+TTF_Font* FitTextInRect(const char* fontPath, const char* text, int maxW, int maxH, int initialSize);
 
 #endif

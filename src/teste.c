@@ -90,6 +90,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 				keepRunning = 0;
 				EnemyManager_Destroy(&enemyController);
 				ExperienceManager_Destroy(&xpController);
+				UpgradeManager_Destroy(&upController);
 				break;
 			}
 			switch (currentGameState) {
@@ -274,6 +275,15 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		}
 
 		if (currentGameState == GAMESTATE_LEVELUP) {
+			Render_player(ren);
+			EnemyManager_RenderEnemies(&enemyController, ren);
+			ExperienceManager_RenderXp(&xpController, ren);
+			DrawWeapons(ren);
+
+			SDL_SetRenderDrawColor(ren, 0, 0, 0, 150);
+			SDL_Rect pauseEffect = {0, 0, 800, 600};
+			SDL_RenderFillRect(ren, &pauseEffect);
+
 			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[0], 20, 150);
 			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[1], 280, 150);
 			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[2], 540, 150);

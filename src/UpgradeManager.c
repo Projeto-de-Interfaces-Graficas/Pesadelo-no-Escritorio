@@ -4,74 +4,82 @@
 
 void UpgradeManager_Init(UpgradeManager* upController, SDL_Renderer* ren) {
     upController->upgradeTitleFont = TTF_OpenFont("assets/fonts/VT323/VT323-Regular.ttf", 50);
-    upController->upgradeDescriptionFont = TTF_OpenFont("assets/fonts/VT323/VT323-Regular.ttf", 30);
+    upController->upgradeDescriptionFont = TTF_OpenFont("assets/fonts/VT323/VT323-Regular.ttf", 15);
     upController->upgradeCount = 10;
     upController->upgradeCardTexture = IMG_LoadTexture(ren, "assets/images/menus/upgrade-option.png");
     upController->allUpgrades[0] = (Upgrade) {
         .id = 0,
-        .name = "Dano +1",
+        .title = "Dano +1",
         .description = "Aumenta em 5 o dano causado pelo jogador",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/dmg.png"),
     };
     
     upController->allUpgrades[1] = (Upgrade) {
         .id = 1,
-        .name = "Velocidade +1",
+        .title = "Velocidade +1",
         .description = "Aumenta a velocidade de movimento do jogador em 10%",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/spd.png"),
     };
 
     upController->allUpgrades[2] = (Upgrade) {
         .id = 2,
-        .name = "Vida +1",
+        .title = "Vida +1",
         .description = "Aumenta a vida máxima do jogador em 20",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[3] = (Upgrade) {
         .id = 3,
-        .name = "Mochila",
+        .title = "Mochila",
         .description = "Uma mochila que pode ser usada para ser defender contra inimigos em sua frente",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[4] = (Upgrade) {
         .id = 4,
-        .name = "Mochila - cooldown",
+        .title = "Mochila - cooldown",
         .description = "Diminui o tempo para poder atacar em 0.1 segundos",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[5] = (Upgrade) {
         .id = 5,
-        .name = "Mochila + Dano",
+        .title = "Mochila + Dano",
         .description = "Aumenta o poder de ataque em 5 dano",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[6] = (Upgrade) {
         .id = 6,
-        .name = "Mochila + alcance",
+        .title = "Mochila + alcance",
         .description = "Aumento o alcence que a mochila acerta inimigos em 5",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[7] = (Upgrade) {
         .id = 7,
-        .name = "Projetil",
+        .title = "Projetil",
         .description = "Aremessa projetis em direção nos inimigos",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[8] = (Upgrade) {
         .id = 8,
-        .name = "Projetil - cooldown",
+        .title = "Projetil - cooldown",
         .description = "Diminui o tempo para poder atacar em 0.1 segundos",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[9] = (Upgrade) {
         .id = 9,
-        .name = "Projetil + Dano",
+        .title = "Projetil + Dano",
         .description = "Aumento o dano que causa em 1",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
+
     upController->allUpgrades[10] = (Upgrade) {
         .id = 10,
-        .name = "Projetil + quantidades",
+        .title = "Projetil + quantidades",
         .description = "Aumenta a qauntidade de Projeteis",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
     };
@@ -83,8 +91,6 @@ void UpgradeManager_Destroy(UpgradeManager* upController) {
             SDL_DestroyTexture(upController->allUpgrades[i].icon);
         }
     }
-    TTF_CloseFont(upController->upgradeTitleFont);
-    TTF_CloseFont(upController->upgradeDescriptionFont);
 }
 
 void UpgradeManager_SelectUpgrades(UpgradeManager* upController) {
@@ -112,13 +118,58 @@ void UpgradeManager_Apply(Upgrade* upgrade) {
 
 void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upController, Upgrade* upgrade, int x, int y) {
 
-    // Renderização do card/frame onde o upgrade é exibido
-    SDL_Rect upgradeCardBox = {x, y, 240, 340};
-    SDL_RenderCopy(ren, upController->upgradeCardTexture, NULL, &upgradeCardBox);
+    SDL_Color textColor = {0x00, 0x00, 0x00, 0xFF};
 
-    // Renderização do ícone do upgrade
-    SDL_Rect upgradeIconBox = {x + 61, y + 43, 120, 60};
-    SDL_RenderCopy(ren, upgrade->icon, NULL, &upgradeIconBox);
+    // Card base
+    SDL_Rect cardBox = {x, y, 240, 340};
+    SDL_RenderCopy(ren, upController->upgradeCardTexture, NULL, &cardBox);
 
-    // Renderização dos textos do upgrade
+    // Ícone
+    SDL_Rect iconBox = {x + 60, y + 42, 120, 60};
+    SDL_RenderCopy(ren, upgrade->icon, NULL, &iconBox);
+
+    // Título
+    int titleMaxW = 160, titleMaxH = 40;
+    TTF_Font* titleFont = FitTextInRect("assets/fonts/VT323/VT323-Regular.ttf", upgrade->title, titleMaxW, titleMaxH, 50);
+    SDL_Surface* titleSurface = TTF_RenderUTF8_Blended_Wrapped(titleFont, upgrade->title, textColor, titleMaxW);
+    SDL_Texture* titleTexture = SDL_CreateTextureFromSurface(ren, titleSurface);
+    int titleBoxX = (x + 40) + (titleMaxW - titleSurface->w) / 2;
+    int titleBoxY = (y + 112) + (titleMaxH - titleSurface->h) / 2;
+    SDL_Rect titleBox = {titleBoxX, titleBoxY, titleSurface->w, titleSurface->h};
+    SDL_RenderCopy(ren, titleTexture, NULL, &titleBox);
+    SDL_FreeSurface(titleSurface);
+    SDL_DestroyTexture(titleTexture);
+    TTF_CloseFont(titleFont);
+
+    // Descrição
+    int descriptionMaxW = 160, descriptionMaxH = 130;
+    TTF_Font* descriptionFont = FitTextInRect("assets/fonts/VT323/VT323-Regular.ttf", upgrade->description, descriptionMaxW, descriptionMaxH, 18);
+    SDL_Surface* descriptionSurface = TTF_RenderUTF8_Blended_Wrapped(descriptionFont, upgrade->description, textColor, descriptionMaxW);
+    SDL_Texture* descriptionTexture = SDL_CreateTextureFromSurface(ren, descriptionSurface);
+    int descriptionBoxX = (x + 40) + (descriptionMaxW - descriptionSurface->w) / 2;
+    int descriptionBoxY = (y + 161) + (descriptionMaxH - descriptionSurface->h) / 2;
+    SDL_Rect descriptionBox = {descriptionBoxX, descriptionBoxY, descriptionSurface->w, descriptionSurface->h};
+    SDL_RenderCopy(ren, descriptionTexture, NULL, &descriptionBox);
+    SDL_FreeSurface(descriptionSurface);
+    SDL_DestroyTexture(descriptionTexture);
+    TTF_CloseFont(descriptionFont);
+}
+
+
+TTF_Font* FitTextInRect(const char* fontPath, const char* text, int maxW, int maxH, int initialSize) {
+    int fontSize = initialSize;
+    TTF_Font* font = TTF_OpenFont(fontPath, fontSize);
+    SDL_Color color = {0x00, 0x00, 0x00, 0xFF};
+    while (fontSize > 8) {
+        SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, maxW);
+        if (surface->w <= maxW && surface->h <= maxH) {
+            SDL_FreeSurface(surface);
+            break;
+        }
+        SDL_FreeSurface(surface);
+        TTF_CloseFont(font);
+        fontSize--;
+        font = TTF_OpenFont(fontPath, fontSize);
+    }
+    return font;
 }
