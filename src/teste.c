@@ -69,12 +69,17 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	UpgradeManager upController;
 
 	/* ENTITIES INITIALIZATION */
-	Create_player(Comum);
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	UpgradeManager_Init(&upController, ren);
+	Create_player(Comum);
+	UpgradeManager_Apply(ren,&upController,&(Upgrade){
+		.id = 3,
+		.title = "Mochila",
+		.description = "Uma mochila que pode ser usada para ser defender contra inimigos em sua frente",
+		.icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+});
 	Fonts_Init("assets/fonts/VT323/VT323-Regular.ttf");
-	Select_Weapon(ARMA_PROJETIL);
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 
 	/* GAME LOOP */
@@ -204,7 +209,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 								break;
 							case SDLK_RETURN:
 								printf("Você escolheu o upgrade %d\n", levelUpMenuOptionSelected + 1);
-								UpgradeManager_Apply(upController.selectedUpgrades[levelUpMenuOptionSelected]);
+								UpgradeManager_Apply(ren,&upController,upController.selectedUpgrades[levelUpMenuOptionSelected]);
 								currentGameState = GAMESTATE_JOGO;
 								break;
 							default:

@@ -1,5 +1,6 @@
 #include<Player.h>
 #include "Weapons.h"
+#include "UpgradeManager.h"
 
 Player player;
 
@@ -25,7 +26,6 @@ void Create_player(int i){
     player.posX = 384;
     player.posY = 284;
     player.luck = 1;
-    Select_Weapon(0);
     break;
     default:
       break;
