@@ -19,7 +19,7 @@ void UpgradeManager_Init(UpgradeManager* upController, SDL_Renderer* ren);
 void UpgradeManager_Destroy(UpgradeManager* upController);
 void UpgradeManager_SelectUpgrades(UpgradeManager* upController);
 void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade* up);
-void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upController, Upgrade* up, int x, int y);
+void UpgradeManager_RenderUpgradeCard(SDL_Renderer* ren, UpgradeManager* upController, Upgrade* up, int x, int y, int selectedUpgrade);
 void UpgradeManager_RemoveSelectWeapon(UpgradeManager* upController, int id);
 
 #endif

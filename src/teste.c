@@ -202,14 +202,16 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 					if (event.type == SDL_KEYDOWN) {
 						switch (event.key.keysym.sym) {
 							case SDLK_LEFT:
-								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 1) % 3;
+								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 2) % 3;
+								printf("Upgrade selecionado: %d\n", levelUpMenuOptionSelected);
 								break;
 							case SDLK_RIGHT:
 								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 1) % 3;
+								printf("Upgrade selecionado: %d\n", levelUpMenuOptionSelected);
 								break;
 							case SDLK_RETURN:
 								printf("Você escolheu o upgrade %d\n", levelUpMenuOptionSelected + 1);
-								UpgradeManager_Apply(ren,&upController,upController.selectedUpgrades[levelUpMenuOptionSelected]);
+								UpgradeManager_Apply(ren, &upController, upController.selectedUpgrades[levelUpMenuOptionSelected]);
 								currentGameState = GAMESTATE_JOGO;
 								break;
 							default:
@@ -286,9 +288,9 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			SDL_Rect pauseEffect = {0, 0, 800, 600};
 			SDL_RenderFillRect(ren, &pauseEffect);
 
-			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[0], 20, 150);
-			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[1], 280, 150);
-			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[2], 540, 150);
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[0], 20, 150, levelUpMenuOptionSelected);
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[1], 280, 150, levelUpMenuOptionSelected);
+			UpgradeManager_RenderUpgradeCard(ren, &upController, upController.selectedUpgrades[2], 540, 150, levelUpMenuOptionSelected);
 		}
 
 		SDL_RenderPresent(ren);

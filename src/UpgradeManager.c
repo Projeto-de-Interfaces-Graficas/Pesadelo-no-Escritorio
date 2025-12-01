@@ -56,9 +56,27 @@ void UpgradeManager_Destroy(UpgradeManager *upController)
 
 void UpgradeManager_SelectUpgrades(UpgradeManager *upController)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        upController->selectedUpgrades[i] = &upController->allUpgrades[rand() % upController->upgradeCount];
+    int addedUpgrades = 0;
+    while (addedUpgrades < 3) {
+        int repeatedUpgrade = 0;
+        Upgrade* up = &upController->allUpgrades[rand() % upController->upgradeCount];
+        if (addedUpgrades > 0) {
+            for (int i = 0; i < addedUpgrades; i++) {
+                if (upController->selectedUpgrades[i]->id == up->id) {
+                    repeatedUpgrade = 1;
+                    break;
+                }
+            }
+            if (!repeatedUpgrade) {
+                upController->selectedUpgrades[addedUpgrades] = up;
+                addedUpgrades++;
+            } else {
+                printf("Preveni que dois upgrades iguais fossem escolhidos!\n");
+            }
+        } else {
+            upController->selectedUpgrades[addedUpgrades] = up;
+            addedUpgrades++;
+        }
     }
 }
 
@@ -145,13 +163,24 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
     printf("o upgrade foi %d\n", upgrade->id);
 }
 
-void UpgradeManager_RenderUpgradeCard(SDL_Renderer *ren, UpgradeManager *upController, Upgrade *upgrade, int x, int y)
+void UpgradeManager_RenderUpgradeCard(SDL_Renderer *ren, UpgradeManager *upController, Upgrade *upgrade, int x, int y, int selectedUpgrade)
 {
 
     SDL_Color textColor = {0x00, 0x00, 0x00, 0xFF};
 
     // Card base
-    SDL_Rect cardBox = {x, y, 240, 340};
+    SDL_Rect cardBox;
+    if (upgrade->id == upController->selectedUpgrades[selectedUpgrade]->id) {
+        cardBox.x = x - 10;
+        cardBox.y = y - 10;
+        cardBox.w = 260;
+        cardBox.h = 360;
+    } else {
+        cardBox.x = x;
+        cardBox.y = y;
+        cardBox.w = 240;
+        cardBox.h = 340;
+    }
     SDL_RenderCopy(ren, upController->upgradeCardTexture, NULL, &cardBox);
 
     // Ícone
