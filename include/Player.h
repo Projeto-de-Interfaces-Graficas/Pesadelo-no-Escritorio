@@ -28,13 +28,14 @@ typedef struct
   float luck;
   Uint32 last_damage_time;
   Uint32 invencibility_time;
+  SDL_Texture* sprite;
   SDL_Rect box;
   int dir;
 }Player;
 
 extern Player player;
 
-void Create_player(int i);
+void Create_player(int i, SDL_Renderer* renderer);
 void Take_damage(int damage);
 void Get_exp(float xp);
 void Levelup();

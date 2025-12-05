@@ -72,7 +72,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	EnemyManager_Init(&enemyController, 2000, ren);
 	ExperienceManager_Init(&xpController, ren, 16);
 	UpgradeManager_Init(&upController, ren);
-	Create_player(Comum);
+	Create_player(Comum, ren);
 	UpgradeManager_Apply(ren,&upController,&(Upgrade){
 		.id = 3,
 		.title = "Mochila",

@@ -1,10 +1,11 @@
 #include<Player.h>
+#include <SDL2/SDL_image.h>
 #include "Weapons.h"
 #include "UpgradeManager.h"
 
 Player player;
 
-void Create_player(int i){
+void Create_player(int i, SDL_Renderer* renderer){
   player.dir = 1;
   switch (i)
   {
@@ -17,10 +18,11 @@ void Create_player(int i){
     player.xp_for_level_up = 5;
     player.level = 1;
     player.has_leveled_up = 0;
+    player.sprite = IMG_LoadTexture(renderer, "assets/images/characters/comum.png");
     player.box.x = 384;
     player.box.y = 284;
-    player.box.w = 32;
-    player.box.h = 32;
+    player.box.w = 48;
+    player.box.h = 48;
     player.last_damage_time = 0;
     player.invencibility_time = 500;
     player.posX = 384;
@@ -60,6 +62,10 @@ void Levelup(){
 }
 
 void Render_player(SDL_Renderer *renderer){
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 200);
-  SDL_RenderFillRect(renderer, &player.box);
+  if (player.dir == -1) {
+    SDL_RenderCopyEx(renderer, player.sprite, NULL, &player.box, 0, NULL, SDL_FLIP_HORIZONTAL);
+  } else {
+    SDL_RenderCopy(renderer, player.sprite, NULL, &player.box);
+  }
+  
 }
