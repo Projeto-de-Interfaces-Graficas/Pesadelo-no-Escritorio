@@ -28,6 +28,8 @@ void Create_player(int i, SDL_Renderer* renderer){
     player.posX = 384;
     player.posY = 284;
     player.luck = 1;
+    player.is_moving = 0;
+    player.current_frame = 0;
     break;
     default:
       break;
@@ -62,10 +64,17 @@ void Levelup(){
 }
 
 void Render_player(SDL_Renderer *renderer){
-  if (player.dir == -1) {
-    SDL_RenderCopyEx(renderer, player.sprite, NULL, &player.box, 0, NULL, SDL_FLIP_HORIZONTAL);
-  } else {
-    SDL_RenderCopy(renderer, player.sprite, NULL, &player.box);
+  SDL_Rect renderBox;
+  switch (player.current_frame) {
+    case 0: renderBox = (SDL_Rect) {0, 0, 32, 32}; break;
+    case 1: renderBox = (SDL_Rect) {32, 0, 32, 32}; break;
+    case 2: renderBox = (SDL_Rect) {64, 0, 32, 32}; break;
+    default: break;
   }
-  
+
+  if (player.dir == -1) {
+    SDL_RenderCopyEx(renderer, player.sprite, &renderBox, &player.box, 0, NULL, SDL_FLIP_HORIZONTAL);
+  } else {
+    SDL_RenderCopy(renderer, player.sprite, &renderBox, &player.box);
+  } 
 }

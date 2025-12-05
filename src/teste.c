@@ -123,13 +123,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 					if (event.type == SDL_KEYDOWN) {
 						switch (event.key.keysym.sym) {
 							case SDLK_w: 
-								movingUp = 1; 
+								movingUp = 1;
 								break;
 							case SDLK_s: 
-								movingDown = 1; 
+								movingDown = 1;
 								break;
 							case SDLK_a: 
-								movingLeft = 1; 
+								movingLeft = 1;
 								player.dir = -1; 
 								break;
 							case SDLK_d: 
@@ -146,13 +146,13 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 					if (event.type == SDL_KEYUP) {
 						switch (event.key.keysym.sym) {
 							case SDLK_w: 
-								movingUp = 0; 
+								movingUp = 0;
 								break;
 							case SDLK_s: 
 								movingDown = 0; 
 								break;
 							case SDLK_a: 
-								movingLeft = 0; 
+								movingLeft = 0;
 								break;
 							case SDLK_d: 
 								movingRight = 0; 
@@ -247,6 +247,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			Collision_EnemyAndEnemy(&enemyController);
 			Collision_EnemyAndWeapon(&enemyController, &xpController);
 			Update_Weapon(deltaTime*1000.0f,&enemyController);
+
 			float movX = movingRight - movingLeft;
 			float movY = movingDown - movingUp;
 			float len = sqrtf(movX * movX + movY * movY);
@@ -258,6 +259,27 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			player.posY += movY * player.movement_speed * deltaTime;
 			player.box.x = (int) player.posX;
 			player.box.y = (int) player.posY;
+
+			if (movX != 0 || movY != 0) {
+				player.is_moving = 1;
+			} else {
+				player.is_moving = 0;
+			}
+			if (movX < 0) {
+				player.dir = -1;
+			}
+			if (movX > 0) {
+				player.dir = 1;
+			}
+			if (player.is_moving) {
+				player.animation_time += deltaTime;
+				if (player.animation_time >= 0.15) {
+					player.current_frame = (player.current_frame + 1) % 3;
+					player.animation_time = 0;
+				}
+			} else {
+				player.current_frame = 0;
+			}
 			Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
 			Collision_PlayerAndXp(&xpController);
 			if (player.has_leveled_up) {

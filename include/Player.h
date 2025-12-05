@@ -29,8 +29,11 @@ typedef struct
   Uint32 last_damage_time;
   Uint32 invencibility_time;
   SDL_Texture* sprite;
+  int current_frame;
+  float animation_time;
   SDL_Rect box;
   int dir;
+  int is_moving;
 }Player;
 
 extern Player player;
