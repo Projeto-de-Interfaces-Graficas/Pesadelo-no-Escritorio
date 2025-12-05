@@ -21,6 +21,8 @@ typedef struct Enemy {
     float spd;
     int xpBaseDropChance; 
     SDL_Texture* sprite; 
+    int direction, currentSprite;
+    float animationTime, maxAnimationTime;
     int active; 
 } Enemy;
 

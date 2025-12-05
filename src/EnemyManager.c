@@ -30,15 +30,15 @@ void EnemyManager_UpdateEnemies(EnemyManager* enemyController, SDL_Renderer* ren
     }
 
     /* Move todos os inimigos ativos na direção do jogador */
-    float enemyX, enemyY; // Posição atual do inimigo
-    float playerX, playerY; // Posição atual do jogador
-    float directionX, directionY; // Direção que o inimigo vai se mover
-    float normalizedDirectionX, normalizedDirectionY, magnitude; // Vetor direção normalizado
-
+    float enemyX, enemyY;
+    float playerX, playerY;
+    float directionX, directionY; 
+    float normalizedDirectionX, normalizedDirectionY, magnitude; 
     for (int i = 0; i < MAX_ENEMIES; i++) {
-        if (enemyController->enemies[i].active) {
-            enemyX = (float) enemyController->enemies[i].box.x;
-            enemyY = (float) enemyController->enemies[i].box.y;
+        Enemy* enemy = &enemyController->enemies[i];
+        if (enemy->active) {
+            enemyX = (float) enemy->box.x;
+            enemyY = (float) enemy->box.y;
             playerX = (float) player.box.x;
             playerY = (float) player.box.y;
 
@@ -54,7 +54,18 @@ void EnemyManager_UpdateEnemies(EnemyManager* enemyController, SDL_Renderer* ren
                 normalizedDirectionY = 0;
             }
 
-            Enemy_UpdateEnemy(&enemyController->enemies[i], normalizedDirectionX, normalizedDirectionY, deltaTime);
+            if (directionX < 0) {
+                enemy->direction = -1; 
+            }
+            if (directionX > 0) {
+                enemy->direction = 1;
+            }
+            enemy->animationTime += deltaTime;
+            if (enemy->animationTime >= enemy->maxAnimationTime) {
+                enemy->currentSprite = (enemy->currentSprite + 1) % 3;
+                enemy->animationTime = 0;
+            }
+            Enemy_UpdateEnemy(enemy, normalizedDirectionX, normalizedDirectionY, deltaTime);
         }
     }
 }

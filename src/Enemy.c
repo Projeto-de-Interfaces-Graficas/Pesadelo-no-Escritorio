@@ -8,7 +8,14 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
     enemy->box.y = (int) enemyPositionY;
 
     enemy->sprite = sprite;
+    enemy->currentSprite = 0;
+    if (enemyPositionX > 0) {
+        enemy->direction = 1;
+    } else {
+        enemy->direction = -1;
+    }
     enemy->type = type;
+    enemy->animationTime = 0;
 
     switch (type) {
         case ENEMY_LAPIS:
@@ -19,6 +26,7 @@ void Enemy_CreateEnemy(Enemy* enemy, EnemyType type, float enemyPositionX, float
             enemy->xpBaseDropChance = 50;
             enemy->box.w = 32; 
             enemy->box.h = 32;
+            enemy->maxAnimationTime = 0.15;
             break;
         case ENEMY_TELEFONE: 
         case ENEMY_IMPRESSORA: 
@@ -33,16 +41,13 @@ void Enemy_UpdateEnemy(Enemy* enemy, float directionX, float directionY, float d
     if(enemy->hp <= 0){
         enemy->active = 0;
     }
-    // Only updates if the enemy is active
     if (enemy->active == 0) {
         return;
     }
 
-    // Updates real enemy position
     enemy->posX += directionX * enemy->spd * deltaTime;
     enemy->posY += directionY * enemy->spd * deltaTime;
 
-    // Updates enemy position for renderization
     enemy->box.x = (int) enemy->posX;
     enemy->box.y = (int) enemy->posY;
 }
@@ -51,7 +56,21 @@ void Enemy_RenderEnemy(SDL_Renderer* ren, Enemy* enemy) {
     if (enemy->active == 0) {
         return;
     }
-    SDL_RenderCopy(ren, enemy->sprite, NULL, &enemy->box);
+
+    SDL_Rect renderBox;
+    switch (enemy->currentSprite) {
+        case 0: renderBox = (SDL_Rect) {0, 0, 32, 32}; break;
+        case 1: renderBox = (SDL_Rect) {32, 0, 32, 32}; break;
+        case 2: renderBox = (SDL_Rect) {64, 0, 32, 32}; break;
+        default: break;
+    }
+
+    if (enemy->direction == -1) {
+        SDL_RenderCopyEx(ren, enemy->sprite, &renderBox, &enemy->box, 0, NULL, SDL_FLIP_HORIZONTAL);
+    } else {
+        SDL_RenderCopy(ren, enemy->sprite, &renderBox, &enemy->box);
+    }
+    
 }
 
 void Enemy_DestroyEnemy(Enemy* enemy) {
