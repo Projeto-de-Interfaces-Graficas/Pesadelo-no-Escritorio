@@ -19,7 +19,6 @@ typedef struct
   int player_hp;
   int player_Maxhp;
   float damage;
-  float defence;
   float movement_speed;
   float xp;
   float xp_for_level_up;

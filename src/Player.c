@@ -13,7 +13,6 @@ void Create_player(int i, SDL_Renderer* renderer){
     player.player_hp = 100;
     player.player_Maxhp = 100;
     player.damage = 1;
-    player.defence = 1;
     player.movement_speed = 200;
     player.xp = 0;
     player.xp_for_level_up = 5;
