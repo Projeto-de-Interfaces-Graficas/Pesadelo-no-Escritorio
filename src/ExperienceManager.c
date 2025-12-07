@@ -14,10 +14,12 @@ void ExperienceManager_Init(ExperienceManager* xpController, SDL_Renderer* ren, 
 }
 
 int ExperienceManager_DropXp(int baseDropChance, float luckMultiplier) {
-    float minimunRollToDrop = baseDropChance * luckMultiplier;
-    int roll = rand() % 100;
-    return roll > minimunRollToDrop;
-    
+    int roll = (rand() % 100) * luckMultiplier;
+    if (baseDropChance >= 50) {
+        return roll < baseDropChance;
+    } else {
+        return roll > baseDropChance;
+    }
 }
 
 void ExperienceManager_CreateXp(ExperienceManager* xpController, ExperienceType type, int x, int y) {
