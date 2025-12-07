@@ -1,7 +1,7 @@
 #include "Collision.h"
 #include "ExperienceManager.h"
 
-void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int* keepRunning) {
+void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController) {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if (enemyController->enemies[i].active) {
 			int hasCollided = Collision_RectAndRect(&enemyController->enemies[i].box, &player->box);
@@ -10,11 +10,9 @@ void Collision_PlayerAndEnemy(Player* player, EnemyManager* enemyController, int
 				if (currentTime - player->last_damage_time >= player->invencibility_time) {
 					Take_damage(enemyController->enemies[i].dmg);
 					player->last_damage_time = currentTime;
-					printf("Tomou dano!\nVida atual: %d\n", player->player_hp); 
 				}
                 if (player->player_hp <= 0) {
-                    *keepRunning = 0;
-                    printf("VOCÊ MORREU!!!\n");
+                    player->alive = 0;
                     break;
 		        }
 			}
@@ -127,7 +125,6 @@ void Collision_PlayerAndXp(ExperienceManager* xpController) {
         if (xp->active) {
             if (Collision_RectAndRect(&player.box, &xp->hitBox)) {
                 player.xp += xp->amount;
-                printf("XP atual do jogador: %0.f\n", player.xp);
                 xp->active = 0;
                 if (player.xp >= player.xp_for_level_up) {
                     Levelup();
