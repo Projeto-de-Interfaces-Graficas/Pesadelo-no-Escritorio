@@ -78,8 +78,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		.title = "Mochila",
 		.description = "Uma mochila que pode ser usada para ser defender contra inimigos em sua frente",
 		.icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
-});
-	Select_Weapon(Cracha, ren);
+	});
 	Fonts_Init("assets/fonts/VT323/VT323-Regular.ttf");
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 	SDL_Texture* gameBackgroundImage = IMG_LoadTexture(ren, "assets/images/map/cenario.png");
@@ -205,14 +204,11 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 						switch (event.key.keysym.sym) {
 							case SDLK_LEFT:
 								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 2) % 3;
-								printf("Upgrade selecionado: %d\n", levelUpMenuOptionSelected);
 								break;
 							case SDLK_RIGHT:
 								levelUpMenuOptionSelected = (levelUpMenuOptionSelected + 1) % 3;
-								printf("Upgrade selecionado: %d\n", levelUpMenuOptionSelected);
 								break;
 							case SDLK_RETURN:
-								printf("Você escolheu o upgrade %d\n", levelUpMenuOptionSelected + 1);
 								UpgradeManager_Apply(ren, &upController, upController.selectedUpgrades[levelUpMenuOptionSelected]);
 								currentGameState = GAMESTATE_JOGO;
 								break;
@@ -288,7 +284,10 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			} else {
 				player.current_frame = 0;
 			}
-			Collision_PlayerAndEnemy(&player, &enemyController, &keepRunning);
+			Collision_PlayerAndEnemy(&player, &enemyController);
+			if (!player.alive) {
+				currentGameState = GAMESTATE_MENUPRINCIPAL;
+			}
 			Collision_PlayerAndXp(&xpController);
 			if (player.has_leveled_up) {
 				player.has_leveled_up = 0;
