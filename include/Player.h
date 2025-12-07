@@ -34,6 +34,7 @@ typedef struct
   SDL_Rect box;
   int dir;
   int is_moving;
+  int alive;
   SDL_Rect bar_hp;
   SDL_Rect bar_HPoutline;
   SDL_Rect bar_XP;

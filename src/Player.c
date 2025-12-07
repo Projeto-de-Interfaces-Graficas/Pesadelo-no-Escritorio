@@ -28,6 +28,7 @@ void Create_player(int i, SDL_Renderer* renderer){
     player.posX = 384;
     player.posY = 284;
     player.luck = 1;
+    player.alive = 1;
     player.is_moving = 0;
     player.current_frame = 0;
     break;
