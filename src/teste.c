@@ -82,6 +82,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 	Select_Weapon(Cracha);
 	Fonts_Init("assets/fonts/VT323/VT323-Regular.ttf");
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
+	SDL_Texture* gameBackgroundImage = IMG_LoadTexture(ren, "assets/images/map/cenario.png");
 
 	/* GAME LOOP */
 	while (keepRunning) {
@@ -230,6 +231,9 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
 
+		SDL_Rect gameBackgroundImageBox = {0, 0, 800, 600};
+		SDL_Rect pauseEffect = {0, 0, 800, 600};
+
 		if (currentGameState == GAMESTATE_MENUPRINCIPAL) {
 			SDL_Rect mainMenuBackgroundImageBox = {0, 0, 800, 600};
 			SDL_RenderCopy(ren, mainMenuBackgroundImage, NULL, &mainMenuBackgroundImageBox);
@@ -238,6 +242,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 
 		if (currentGameState == GAMESTATE_JOGO) {
 			// Renderização dos objetos do jogo
+			SDL_RenderCopy(ren, gameBackgroundImage, NULL, &gameBackgroundImageBox);
 			Render_player(ren);
 			Render_HPbar(ren);
 			Render_XPbar(ren);
@@ -249,7 +254,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			EnemyManager_UpdateEnemies(&enemyController, ren, player, deltaTime, LARGURA, ALTURA);
 			Collision_EnemyAndEnemy(&enemyController);
 			Collision_EnemyAndWeapon(&enemyController, &xpController);
-			Update_Weapon(deltaTime*1000.0f,&enemyController);
+			Update_Weapon(deltaTime*1000.0f, &enemyController);
 
 			float movX = movingRight - movingLeft;
 			float movY = movingDown - movingUp;
@@ -293,17 +298,18 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		}
 
 		if (currentGameState == GAMESTATE_PAUSE) {
+			SDL_RenderCopy(ren, gameBackgroundImage, NULL, &gameBackgroundImageBox);
 			Render_player(ren);
 			EnemyManager_RenderEnemies(&enemyController, ren);
 			ExperienceManager_RenderXp(&xpController, ren);
 			DrawWeapons(ren);
 
 			SDL_SetRenderDrawColor(ren, 0, 0, 0, 150);
-			SDL_Rect pauseEffect = {0, 0, 800, 600};
 			SDL_RenderFillRect(ren, &pauseEffect);	
 		}
 
 		if (currentGameState == GAMESTATE_LEVELUP) {
+			SDL_RenderCopy(ren, gameBackgroundImage, NULL, &gameBackgroundImageBox);
 			Render_player(ren);
 			EnemyManager_RenderEnemies(&enemyController, ren);
 			ExperienceManager_RenderXp(&xpController, ren);
