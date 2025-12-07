@@ -80,7 +80,7 @@ void UpgradeManager_SelectUpgrades(UpgradeManager *upController)
     }
 }
 
-void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade *upgrade)
+void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgrade *upgrade)
 {
     switch (upgrade->id)
     {
@@ -94,7 +94,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         player.player_hp += 20;
         break;
     case 3:
-        Select_Weapon(Mochila);
+        Select_Weapon(Mochila, ren);
         UpgradeManager_RemoveSelectWeapon(upController, 3);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 5,
@@ -118,7 +118,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         upController->upgradeCount += 3;
         break;
     case 4:
-        Select_Weapon(Elastico);
+        Select_Weapon(Elastico, ren);
         UpgradeManager_RemoveSelectWeapon(upController, 4);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 8,
