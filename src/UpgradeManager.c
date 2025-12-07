@@ -9,37 +9,37 @@ void UpgradeManager_Init(UpgradeManager *upController, SDL_Renderer *ren)
     upController->upgradeCardTexture = IMG_LoadTexture(ren, "assets/images/menus/upgrade-option.png");
     upController->allUpgrades[0] = (Upgrade){
         .id = 0,
-        .title = "Dano +1",
-        .description = "Aumenta em 5 o dano causado pelo jogador",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/dmg.png"),
+        .title = "Passe da Academia",
+        .description = "Aumenta o dano causado pelos ataques do funcionário em 5",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/passe-academia.png"),
     };
 
     upController->allUpgrades[1] = (Upgrade){
         .id = 1,
-        .title = "Velocidade +1",
-        .description = "Aumenta a velocidade de movimento do jogador em 10%",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/spd.png"),
+        .title = "Cafezinho",
+        .description = "Aumenta a velocidade de movimento do funcionário em 10%",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
     };
 
     upController->allUpgrades[2] = (Upgrade){
         .id = 2,
-        .title = "Vida +1",
-        .description = "Aumenta a vida máxima do jogador em 20",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+        .title = "Terno Corporativo",
+        .description = "Aumenta a vida máxima do funcionário em 20",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/terno.png"),
     };
 
     upController->allUpgrades[3] = (Upgrade){
         .id = 3,
         .title = "Mochila",
-        .description = "Uma mochila que pode ser usada para ser defender contra inimigos em sua frente",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+        .description = "Uma mochila que pode ser usada para se defender dos inimigos à sua frente",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
     };
 
     upController->allUpgrades[4] = (Upgrade){
         .id = 4,
-        .title = "Projetil",
-        .description = "Aremessa projetis em direção nos inimigos",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+        .title = "Elástico",
+        .description = "Aremessa elásticos na direção do inimigo mais próximo",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
     };
 }
 
@@ -71,7 +71,7 @@ void UpgradeManager_SelectUpgrades(UpgradeManager *upController)
                 upController->selectedUpgrades[addedUpgrades] = up;
                 addedUpgrades++;
             } else {
-                printf("Preveni que dois upgrades iguais fossem escolhidos!\n");
+                printf("Previni que dois upgrades iguais fossem escolhidos!\n");
             }
         } else {
             upController->selectedUpgrades[addedUpgrades] = up;
@@ -98,22 +98,22 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         UpgradeManager_RemoveSelectWeapon(upController, 3);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 5,
-            .title = "Mochila - cooldown",
-            .description = "Diminui o tempo para poder atacar em 0.1 segundos",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Manejo Ágil",
+            .description = "Diminui o tempo de espera entre os ataques da mochila em 0.1 segundos",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
 
         upController->allUpgrades[upController->upgradeCount+1] = (Upgrade){
             .id = 6,
-            .title = "Mochila + Dano",
-            .description = "Aumenta o poder de ataque em 5 dano",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Costura Reforçada",
+            .description = "Aumenta o dano dos ataques da mochila em 5",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
         upController->allUpgrades[upController->upgradeCount+2] = (Upgrade){
             .id = 7,
-            .title = "Mochila + alcance",
-            .description = "Aumento o alcence que a mochila acerta inimigos em 5",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Alças Esticáveis",
+            .description = "Aumenta o alcance dos ataques da mochila",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
         upController->upgradeCount += 3;
         break;
@@ -122,22 +122,22 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         UpgradeManager_RemoveSelectWeapon(upController, 4);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 8,
-            .title = "Projetil - cooldown",
-            .description = "Diminui o tempo para poder atacar em 0.1 segundos",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Agrupamento de Documentos",
+            .description = "Diminui o tempo de espera entre os disparos dos elásticos em 0.1 segundos",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
 
         upController->allUpgrades[upController->upgradeCount+1] = (Upgrade){
             .id = 9,
-            .title = "Projetil + Dano",
-            .description = "Aumento o dano que causa em 1",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Borracha de Qualidade",
+            .description = "Aumenta o dano causado pelos elásticos em 5",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
         upController->allUpgrades[upController->upgradeCount+2] = (Upgrade){
             .id = 10,
-            .title = "Projetil + quantidades",
-            .description = "Aumenta a qauntidade de Projeteis",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
+            .title = "Nova Remessa",
+            .description = "Aumenta a quantidade de elásticos disparados em 1",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
         upController->upgradeCount += 3;
         break;
@@ -184,7 +184,10 @@ void UpgradeManager_RenderUpgradeCard(SDL_Renderer *ren, UpgradeManager *upContr
     SDL_RenderCopy(ren, upController->upgradeCardTexture, NULL, &cardBox);
 
     // Ícone
-    SDL_Rect iconBox = {x + 60, y + 42, 120, 60};
+    int iconBox_w = 64, iconBox_h = 64;
+    int iconBox_x = ((cardBox.w / 2) - (iconBox_w / 2)) + cardBox.x;
+    int iconBox_y = cardBox.y + 50;
+    SDL_Rect iconBox = {iconBox_x, iconBox_y, iconBox_w, iconBox_h};
     SDL_RenderCopy(ren, upgrade->icon, NULL, &iconBox);
 
     // Título
