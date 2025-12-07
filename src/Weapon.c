@@ -111,12 +111,28 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 		}
 		break;
 	case Cracha:
-		selecionadas[i].box.x = player.box.x + 100 * cos(45 * M_PI / 180) - selecionadas[i].range / 2;
-		selecionadas[i].box.y = player.box.y + 100 * sin(45 * M_PI / 180) - selecionadas[i].range / 2;
-		selecionadas[i].box.w = selecionadas[i].range;
-		selecionadas[i].box.h = selecionadas[i].range;
-		selecionadas[i].active = selecionadas[i].active_max;
-		selecionadas[i].is_on_screen = 0;
+		for (int i = 0; i < arma->active_max; i++)
+		{
+			Projectiles novo_projetil;
+			novo_projetil.dir_x = 45;
+			novo_projetil.is_on_screen = 0;
+			novo_projetil.box.x =  player.box.x + 100 * cos(novo_projetil.dir_x *  i * M_PI / 180) - selecionadas[i].range / 2;
+			novo_projetil.box.y =  player.box.y + 100 * sin(novo_projetil.dir_x  * i * M_PI / 180) - selecionadas[i].range / 2;
+			novo_projetil.box.w = 10;
+			novo_projetil.box.h = 10;
+			novo_projetil.active = 1;
+			novo_projetil.pierce = 1;
+			novo_projetil.Weapon = arma;
+			novo_projetil.speed = 5;
+			for (int j = 0; j < Max_projectiles; j++)
+			{
+				if (list_projects[j].active != 1)
+				{
+					list_projects[j] = novo_projetil;
+					break;
+				}
+			}
+		}
 		break;
 	default:
 		break;
@@ -156,8 +172,15 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 			}
 			if (list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
 			{
-				list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
-				list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
+				if(list_projects[i].Weapon->tipo == Elastico){
+					list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
+					list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
+				}
+				else if(list_projects[i].Weapon->tipo == Cracha){
+					list_projects[i].dir_x += list_projects[i].speed;
+					list_projects[i].box.y =  player.box.y + 100 * sin(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
+					list_projects[i].box.x =  player.box.x + 100 * cos(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
+				}
 				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
 			}
 		}
@@ -182,32 +205,6 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 					selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
 				}
 				selecionadas[0].box.y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
-			}
-			else if (selecionadas[i].tipo == Cracha)
-			{
-				printf("Valor de X e valor de Y antes = %d , %d\n", selecionadas[i].box.x, selecionadas[i].box.y);
-				float ang = 5 * M_PI / 180.0f;
-
-				// Centro atual do quadrado
-				float cx = selecionadas[i].box.x + selecionadas[i].box.w / 2.0f;
-				float cy = selecionadas[i].box.y + selecionadas[i].box.h / 2.0f;
-
-				// Offset em relação ao player
-				float dx = cx - (player.box.x + player.box.w / 2.0f);
-				float dy = cy - (player.box.y + player.box.h / 2.0f);
-
-				// Rotação correta
-				float newX = dx * cos(ang) - dy * sin(ang);
-				float newY = dx * sin(ang) + dy * cos(ang);
-
-				// Novo centro do quadrado
-				cx = (player.box.x + player.box.w / 2.0f) + newX;
-				cy = (player.box.y + player.box.h / 2.0f) + newY;
-
-				// Reposiciona o quadrado
-				selecionadas[i].box.x = cx - selecionadas[i].box.w / 2.0f;
-				selecionadas[i].box.y = cy - selecionadas[i].box.h / 2.0f;
-				printf("Valor de X e valor de Y depois = %d , %d\n", selecionadas[i].box.x, selecionadas[i].box.y);
 			}
 		}
 		else if (selecionadas[i].active == 0)
