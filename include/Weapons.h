@@ -10,9 +10,9 @@
 #define Max_Weapons  3
 
 typedef enum{
-	ARMA_CHICOTE,
-	ARMA_PROJETIL,
-	ARMA_AREA,
+	Mochila,
+	Elastico,
+	Cracha,
 } ArmaTipo;
 
 typedef struct 

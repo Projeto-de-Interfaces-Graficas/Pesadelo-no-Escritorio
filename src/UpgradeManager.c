@@ -94,7 +94,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         player.player_hp += 20;
         break;
     case 3:
-        Select_Weapon(ARMA_CHICOTE);
+        Select_Weapon(Mochila);
         UpgradeManager_RemoveSelectWeapon(upController, 3);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 5,
@@ -118,7 +118,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         upController->upgradeCount += 3;
         break;
     case 4:
-        Select_Weapon(ARMA_PROJETIL);
+        Select_Weapon(Elastico);
         UpgradeManager_RemoveSelectWeapon(upController, 4);
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 8,
@@ -142,22 +142,22 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
         upController->upgradeCount += 3;
         break;
     case 5:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_CHICOTE)], 1);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Mochila)], 1);
         break;
     case 6:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_CHICOTE)], 2);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Mochila)], 2);
         break;
     case 7:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_CHICOTE)], 4);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Mochila)], 4);
         break;
     case 8:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_PROJETIL)], 1);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Elastico)], 1);
         break;
     case 9:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_PROJETIL)], 2);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Elastico)], 2);
         break;
     case 10:
-        Upgrade_Weapon(&selecionadas[Get_Weapon_index(ARMA_PROJETIL)], 5);
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Elastico)], 5);
         break;
     }
     printf("o upgrade foi %d\n", upgrade->id);

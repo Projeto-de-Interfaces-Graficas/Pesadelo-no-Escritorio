@@ -14,17 +14,17 @@ void Select_Weapon(int tipo)
 	Arma new_weapon;
 	switch (tipo)
 	{
-	case ARMA_CHICOTE:
+	case Mochila:
 		new_weapon.cooldown = 2 * seconds;
 		new_weapon.damage = 10;
 		new_weapon.duration = 0.25 * seconds;
 		new_weapon.range = 50;
 		new_weapon.recharging_time = 0;
-		new_weapon.tipo = ARMA_CHICOTE;
+		new_weapon.tipo = Mochila;
 		new_weapon.active = 0;
 		new_weapon.active_max = 1;
 		break;
-	case ARMA_PROJETIL:
+	case Elastico:
 		new_weapon.active = 0;
 		new_weapon.active_max = 1;
 		new_weapon.cooldown = 4 * seconds;
@@ -32,11 +32,21 @@ void Select_Weapon(int tipo)
 		new_weapon.range = 100;
 		new_weapon.recharging_time = 0;
 		new_weapon.duration = 1 * seconds;
-		new_weapon.tipo = ARMA_PROJETIL;
+		new_weapon.tipo = Elastico;
 		new_weapon.box.x = 0;
 		new_weapon.box.y = 0;
 		new_weapon.box.w = 0;
 		new_weapon.box.h = 0;
+		break;
+	case Cracha:
+		new_weapon.active = 0;
+		new_weapon.active_max = 1;
+		new_weapon.cooldown = 3 * seconds;
+		new_weapon.damage = 10;
+		new_weapon.range = 25;
+		new_weapon.recharging_time = 0;
+		new_weapon.duration = 2 * seconds;
+		new_weapon.tipo = Cracha;
 		break;
 	default:
 		break;
@@ -54,7 +64,7 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 	int y;
 	switch (arma->tipo)
 	{
-	case ARMA_CHICOTE:
+	case Mochila:
 		selecionadas[i].box.w = 100;
 		selecionadas[i].box.h = 15;
 		if (player.dir == -1)
@@ -71,12 +81,13 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 		selecionadas[i].active = selecionadas[i].active_max;
 		selecionadas[i].is_on_screen = 0;
 		break;
-	case ARMA_PROJETIL:
-		for(int i = 0; i< arma->active_max;i++){
+	case Elastico:
+		for (int i = 0; i < arma->active_max; i++)
+		{
 			Projectiles novo_projetil;
 			novo_projetil.is_on_screen = 0;
-			novo_projetil.box.x = (player.box.x + (player.box.w) / 2) + i*10;
-			novo_projetil.box.y = (player.box.y + (player.box.h) / 2) + i*10;
+			novo_projetil.box.x = (player.box.x + (player.box.w) / 2) + i * 10;
+			novo_projetil.box.y = (player.box.y + (player.box.h) / 2) + i * 10;
 			novo_projetil.box.w = 10;
 			novo_projetil.box.h = 10;
 			novo_projetil.active = 1;
@@ -98,6 +109,14 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 				}
 			}
 		}
+		break;
+	case Cracha:
+		selecionadas[i].box.x = player.box.x + 100 * cos(45 * M_PI / 180) - selecionadas[i].range / 2;
+		selecionadas[i].box.y = player.box.y + 100 * sin(45 * M_PI / 180) - selecionadas[i].range / 2;
+		selecionadas[i].box.w = selecionadas[i].range;
+		selecionadas[i].box.h = selecionadas[i].range;
+		selecionadas[i].active = selecionadas[i].active_max;
+		selecionadas[i].is_on_screen = 0;
 		break;
 	default:
 		break;
@@ -152,7 +171,7 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 			{
 				selecionadas[i].active -= 1;
 			}
-			if (selecionadas[i].tipo == ARMA_CHICOTE)
+			if (selecionadas[i].tipo == Mochila)
 			{
 				if (player.dir == -1)
 				{
@@ -163,6 +182,32 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 					selecionadas[0].box.x = (player.box.x + (player.box.w) / 2);
 				}
 				selecionadas[0].box.y = (player.box.y + (player.box.h) / 2) - selecionadas[0].box.h / 2;
+			}
+			else if (selecionadas[i].tipo == Cracha)
+			{
+				printf("Valor de X e valor de Y antes = %d , %d\n", selecionadas[i].box.x, selecionadas[i].box.y);
+				float ang = 5 * M_PI / 180.0f;
+
+				// Centro atual do quadrado
+				float cx = selecionadas[i].box.x + selecionadas[i].box.w / 2.0f;
+				float cy = selecionadas[i].box.y + selecionadas[i].box.h / 2.0f;
+
+				// Offset em relação ao player
+				float dx = cx - (player.box.x + player.box.w / 2.0f);
+				float dy = cy - (player.box.y + player.box.h / 2.0f);
+
+				// Rotação correta
+				float newX = dx * cos(ang) - dy * sin(ang);
+				float newY = dx * sin(ang) + dy * cos(ang);
+
+				// Novo centro do quadrado
+				cx = (player.box.x + player.box.w / 2.0f) + newX;
+				cy = (player.box.y + player.box.h / 2.0f) + newY;
+
+				// Reposiciona o quadrado
+				selecionadas[i].box.x = cx - selecionadas[i].box.w / 2.0f;
+				selecionadas[i].box.y = cy - selecionadas[i].box.h / 2.0f;
+				printf("Valor de X e valor de Y depois = %d , %d\n", selecionadas[i].box.x, selecionadas[i].box.y);
 			}
 		}
 		else if (selecionadas[i].active == 0)
@@ -185,10 +230,10 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 	case 1: // Cooldown
 		switch (armatype)
 		{
-		case ARMA_CHICOTE:
+		case Mochila:
 			arma->cooldown -= 0.05 * seconds;
 			break;
-		case ARMA_PROJETIL:
+		case Elastico:
 			arma->cooldown -= 0.1 * seconds;
 			break;
 		default:
@@ -198,10 +243,10 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 	case 2: // Damage
 		switch (armatype)
 		{
-		case ARMA_CHICOTE:
+		case Mochila:
 			arma->damage += 5;
 			break;
-		case ARMA_PROJETIL:
+		case Elastico:
 			arma->damage += 1;
 			break;
 		default:
@@ -213,7 +258,7 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 	case 4: // Range
 		switch (armatype)
 		{
-		case ARMA_CHICOTE:
+		case Mochila:
 			arma->range += 5;
 			break;
 		default:
@@ -223,10 +268,10 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 	case 5: // Active
 		switch (armatype)
 		{
-		case ARMA_PROJETIL:
-			arma->active_max += 1; 
+		case Elastico:
+			arma->active_max += 1;
 			break;
-		
+
 		default:
 			break;
 		}
@@ -236,9 +281,12 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 	}
 }
 
-int Get_Weapon_index(ArmaTipo tipo){
-	for(int i =0; i<Max_Weapons;i++){
-		if(selecionadas[i].tipo == tipo) return i;
+int Get_Weapon_index(ArmaTipo tipo)
+{
+	for (int i = 0; i < Max_Weapons; i++)
+	{
+		if (selecionadas[i].tipo == tipo)
+			return i;
 	}
 	return -1;
 }

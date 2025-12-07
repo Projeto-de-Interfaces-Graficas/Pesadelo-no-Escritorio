@@ -17,6 +17,7 @@ typedef enum{
 typedef struct 
 {
   int player_hp;
+  int player_Maxhp;
   float damage;
   float defence;
   float movement_speed;
@@ -34,6 +35,8 @@ typedef struct
   SDL_Rect box;
   int dir;
   int is_moving;
+  SDL_Rect bar_hp;
+  SDL_Rect bar_HPoutline;
 }Player;
 
 extern Player player;
@@ -43,5 +46,6 @@ void Take_damage(int damage);
 void Get_exp(float xp);
 void Levelup();
 void Render_player(SDL_Renderer *renderer);
-
+void Render_HPbar(SDL_Renderer* ren);
+void Render_XPbar(SDL_Renderer* ren);
 #endif

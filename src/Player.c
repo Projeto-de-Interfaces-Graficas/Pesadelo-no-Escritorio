@@ -11,6 +11,7 @@ void Create_player(int i, SDL_Renderer* renderer){
   {
   case 0:
     player.player_hp = 100;
+    player.player_Maxhp = 100;
     player.damage = 1;
     player.defence = 1;
     player.movement_speed = 200;
@@ -77,4 +78,23 @@ void Render_player(SDL_Renderer *renderer){
   } else {
     SDL_RenderCopy(renderer, player.sprite, &renderBox, &player.box);
   } 
+}
+
+void Render_HPbar(SDL_Renderer* ren){
+  player.bar_HPoutline.w  = 50;
+  player.bar_HPoutline.h  = 15;
+  player.bar_HPoutline.x  = (player.box.x + (player.box.w) / 2) - player.bar_HPoutline.w/2;
+  player.bar_HPoutline.y  = player.box.y-30;
+  player.bar_hp.w = ((float)player.player_hp/player.player_Maxhp*player.bar_HPoutline.w);
+  player.bar_hp.h = player.bar_HPoutline.h-6;
+  player.bar_hp.x = player.bar_HPoutline.x;
+  player.bar_hp.y = (player.bar_HPoutline.y + (float)player.bar_HPoutline.h/2) - player.bar_hp.h/2;
+  SDL_SetRenderDrawColor(ren, 0, 0, 0, 200);
+	SDL_RenderFillRect(ren, &player.bar_HPoutline);
+  SDL_SetRenderDrawColor(ren, 255, 0, 0, 200);
+	SDL_RenderFillRect(ren, &player.bar_hp);
+}
+
+void Render_XPbar(SDL_Renderer* ren){
+
 }
