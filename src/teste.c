@@ -239,6 +239,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 			// Renderização dos objetos do jogo
 			Render_player(ren);
 			Render_HPbar(ren);
+			Render_XPbar(ren);
 			EnemyManager_RenderEnemies(&enemyController, ren);
 			ExperienceManager_RenderXp(&xpController, ren);
 			DrawWeapons(ren);

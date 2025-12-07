@@ -96,5 +96,16 @@ void Render_HPbar(SDL_Renderer* ren){
 }
 
 void Render_XPbar(SDL_Renderer* ren){
-
+  player.bar_XPoutline.w  = 800;
+  player.bar_XPoutline.h  = 50;
+  player.bar_XPoutline.x  = 0;
+  player.bar_XPoutline.y  = 550;
+  player.bar_XP.w = ((float)player.xp/player.xp_for_level_up*player.bar_XPoutline.w);
+  player.bar_XP.h = player.bar_XPoutline.h-10;
+  player.bar_XP.x = player.bar_XPoutline.x;
+  player.bar_XP.y = (player.bar_XPoutline.y + (float)player.bar_XPoutline.h/2) - player.bar_XP.h/2;
+  SDL_SetRenderDrawColor(ren, 100, 100, 100, 200);
+	SDL_RenderFillRect(ren, &player.bar_XPoutline);
+  SDL_SetRenderDrawColor(ren, 0, 0, 255, 200);
+	SDL_RenderFillRect(ren, &player.bar_XP);
 }

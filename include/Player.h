@@ -37,6 +37,8 @@ typedef struct
   int is_moving;
   SDL_Rect bar_hp;
   SDL_Rect bar_HPoutline;
+  SDL_Rect bar_XP;
+  SDL_Rect bar_XPoutline;
 }Player;
 
 extern Player player;
