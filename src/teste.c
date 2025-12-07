@@ -79,6 +79,7 @@ void ExecuteGame(SDL_Window *win, SDL_Renderer *ren) {
 		.description = "Uma mochila que pode ser usada para ser defender contra inimigos em sua frente",
 		.icon = IMG_LoadTexture(ren, "assets/images/upgrades/hp.png"),
 });
+	Select_Weapon(Cracha, ren);
 	Fonts_Init("assets/fonts/VT323/VT323-Regular.ttf");
 	SDL_Texture* mainMenuBackgroundImage = IMG_LoadTexture(ren, "assets/images/menus/tela-inicial.png");
 	SDL_Texture* gameBackgroundImage = IMG_LoadTexture(ren, "assets/images/map/cenario.png");

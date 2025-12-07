@@ -9,7 +9,7 @@ Arma selecionadas[Max_Weapons];
 
 Projectiles list_projects[Max_projectiles];
 
-void Select_Weapon(int tipo)
+void Select_Weapon(int tipo, SDL_Renderer* ren)
 {
 	Arma new_weapon;
 	switch (tipo)
@@ -23,6 +23,7 @@ void Select_Weapon(int tipo)
 		new_weapon.tipo = Mochila;
 		new_weapon.active = 0;
 		new_weapon.active_max = 1;
+		new_weapon.sprite = IMG_LoadTexture(ren, "assets/images/weapons/mochila.png");
 		break;
 	case Elastico:
 		new_weapon.active = 0;
@@ -37,6 +38,7 @@ void Select_Weapon(int tipo)
 		new_weapon.box.y = 0;
 		new_weapon.box.w = 0;
 		new_weapon.box.h = 0;
+		new_weapon.sprite = IMG_LoadTexture(ren, "assets/images/weapons/elastico.png");
 		break;
 	case Cracha:
 		new_weapon.active = 0;
@@ -47,6 +49,7 @@ void Select_Weapon(int tipo)
 		new_weapon.recharging_time = 0;
 		new_weapon.duration = 5 * seconds;
 		new_weapon.tipo = Cracha;
+		new_weapon.sprite = IMG_LoadTexture(ren, "assets/images/weapons/cracha.png");
 		break;
 	default:
 		break;
@@ -94,6 +97,7 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 			novo_projetil.pierce = 1;
 			novo_projetil.Weapon = arma;
 			novo_projetil.speed = 10;
+			novo_projetil.sprite = arma->sprite;
 			x = novo_projetil.box.x;
 			y = novo_projetil.box.y;
 			float x1, y1;
@@ -124,6 +128,7 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 			novo_projetil.pierce = 9999999;
 			novo_projetil.Weapon = arma;
 			novo_projetil.speed = 5;
+			novo_projetil.sprite = arma->sprite;
 			for (int j = 0; j < Max_projectiles; j++)
 			{
 				if (list_projects[j].active != 1)
@@ -143,18 +148,19 @@ void DrawWeapons(SDL_Renderer *renderer)
 {
 	for (int i = 0; i < n_weapons_choices; i++)
 	{
-		if (selecionadas[i].active == 1)
-		{
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-			SDL_RenderFillRect(renderer, &selecionadas[i].box);
+		if (selecionadas[i].active == 1) {
+			if (player.dir == -1) {
+				SDL_RenderCopyEx(renderer, selecionadas[i].sprite, NULL, &selecionadas[i].box, 0, NULL, SDL_FLIP_HORIZONTAL);
+			} else {
+				SDL_RenderCopy(renderer, selecionadas[i].sprite, NULL, &selecionadas[i].box);
+			}		
 		}
 	}
 	for (int i = 0; i < Max_projectiles; i++)
 	{
 		if (list_projects[i].active == 1)
 		{
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-			SDL_RenderFillRect(renderer, &list_projects[i].box);
+			SDL_RenderCopy(renderer, list_projects[i].sprite, NULL, &list_projects[i].box);
 		}
 	}
 }
@@ -230,7 +236,7 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		switch (armatype)
 		{
 		case Mochila:
-			arma->cooldown -= 0.05 * seconds;
+			arma->cooldown -= 0.1 * seconds;
 			break;
 		case Elastico:
 			arma->cooldown -= 0.1 * seconds;
@@ -249,7 +255,7 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 			arma->damage += 5;
 			break;
 		case Elastico:
-			arma->damage += 1;
+			arma->damage += 5;
 			break;
 		case Cracha:
 			arma->damage += 3;

@@ -27,6 +27,7 @@ typedef struct
 	int active;
 	SDL_Rect box;
 	int active_max;
+	SDL_Texture* sprite;
 }Arma;
 
 typedef struct{
@@ -39,6 +40,7 @@ typedef struct{
 	float speed;
 	int pierce;
 	int active;
+	SDL_Texture* sprite;
 }Projectiles;
 
 extern int n_weapons_choices;
@@ -47,7 +49,7 @@ extern Arma selecionadas[Max_Weapons];
 
 extern Projectiles list_projects[Max_projectiles];
 
-void Select_Weapon(int type);
+void Select_Weapon(int type, SDL_Renderer* ren);
 
 void Active_Weapon(Arma *arma, int i, EnemyManager* enemyController);
 
