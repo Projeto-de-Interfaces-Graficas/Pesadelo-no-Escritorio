@@ -45,7 +45,7 @@ void UpgradeManager_Init(UpgradeManager *upController, SDL_Renderer *ren)
         .id = 11,
         .title = "Cracha",
         .description = "Gire ao seu redor para se proteger de inimigos",
-        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cracha.png"),
     };
 }
 
@@ -60,35 +60,23 @@ void UpgradeManager_Destroy(UpgradeManager *upController)
     }
 }
 
-void UpgradeManager_SelectUpgrades(UpgradeManager *upController)
-{
+void UpgradeManager_SelectUpgrades(UpgradeManager *upController) {
     int addedUpgrades = 0;
-    while (addedUpgrades < 3)
-    {
+    while (addedUpgrades < 3) {
         int repeatedUpgrade = 0;
         Upgrade *up = &upController->allUpgrades[rand() % upController->upgradeCount];
-        if (addedUpgrades > 0)
-        {
-            for (int i = 0; i < addedUpgrades; i++)
-            {
-                if (upController->selectedUpgrades[i]->id == up->id)
-                {
+        if (addedUpgrades > 0) {
+            for (int i = 0; i < addedUpgrades; i++) {
+                if (upController->selectedUpgrades[i]->id == up->id) {
                     repeatedUpgrade = 1;
                     break;
                 }
             }
-            if (!repeatedUpgrade)
-            {
+            if (!repeatedUpgrade) {
                 upController->selectedUpgrades[addedUpgrades] = up;
                 addedUpgrades++;
             }
-            else
-            {
-                printf("Previni que dois upgrades iguais fossem escolhidos!\n");
-            }
-        }
-        else
-        {
+        } else {
             upController->selectedUpgrades[addedUpgrades] = up;
             addedUpgrades++;
         }
@@ -185,32 +173,32 @@ void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgra
         Upgrade_Weapon(&selecionadas[Get_Weapon_index(Elastico)], 5);
         break;
     case 11:
-        Select_Weapon(Cracha);
+        Select_Weapon(Cracha, ren);
         UpgradeManager_RemoveSelectWeapon(upController, 11);
 
         upController->allUpgrades[upController->upgradeCount] = (Upgrade){
             .id = 12,
-            .title = "Cracha ",
+            .title = "Cracha",
             .description = "Diminui o tempo entre a aparição dos crachas",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cracha.png"),
         };
         upController->allUpgrades[upController->upgradeCount + 1] = (Upgrade){
             .id = 13,
             .title = "Cracha Duro",
             .description = "Aumenta a rigidez do cracha fazendo assim causar mais dano",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cracha.png"),
         };
         upController->allUpgrades[upController->upgradeCount + 2] = (Upgrade){
             .id = 14,
             .title = "Crachas emprestrados",
             .description = "Aumenta a quantidade de Crachas giratorios em 1",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cracha.png"),
         };
         upController->allUpgrades[upController->upgradeCount + 3] = (Upgrade){
             .id = 15,
             .title = "Crachas Maiores",
-            .description = "Parabens seu cracha creseu",
-            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+            .description = "Parabens seu cracha cresceu",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cracha.png"),
         };
         upController->upgradeCount += 4;
         if(n_weapons_choices == Max_Weapons){
