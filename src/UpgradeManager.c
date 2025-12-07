@@ -5,7 +5,7 @@
 
 void UpgradeManager_Init(UpgradeManager *upController, SDL_Renderer *ren)
 {
-    upController->upgradeCount = 5;
+    upController->upgradeCount = 6;
     upController->upgradeCardTexture = IMG_LoadTexture(ren, "assets/images/menus/upgrade-option.png");
     upController->allUpgrades[0] = (Upgrade){
         .id = 0,
@@ -41,6 +41,12 @@ void UpgradeManager_Init(UpgradeManager *upController, SDL_Renderer *ren)
         .description = "Aremessa elásticos na direção do inimigo mais próximo",
         .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
     };
+    upController->allUpgrades[5] = (Upgrade){
+        .id = 11,
+        .title = "Cracha",
+        .description = "Gire ao seu redor para se proteger de inimigos",
+        .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+    };
 }
 
 void UpgradeManager_Destroy(UpgradeManager *upController)
@@ -57,30 +63,39 @@ void UpgradeManager_Destroy(UpgradeManager *upController)
 void UpgradeManager_SelectUpgrades(UpgradeManager *upController)
 {
     int addedUpgrades = 0;
-    while (addedUpgrades < 3) {
+    while (addedUpgrades < 3)
+    {
         int repeatedUpgrade = 0;
-        Upgrade* up = &upController->allUpgrades[rand() % upController->upgradeCount];
-        if (addedUpgrades > 0) {
-            for (int i = 0; i < addedUpgrades; i++) {
-                if (upController->selectedUpgrades[i]->id == up->id) {
+        Upgrade *up = &upController->allUpgrades[rand() % upController->upgradeCount];
+        if (addedUpgrades > 0)
+        {
+            for (int i = 0; i < addedUpgrades; i++)
+            {
+                if (upController->selectedUpgrades[i]->id == up->id)
+                {
                     repeatedUpgrade = 1;
                     break;
                 }
             }
-            if (!repeatedUpgrade) {
+            if (!repeatedUpgrade)
+            {
                 upController->selectedUpgrades[addedUpgrades] = up;
                 addedUpgrades++;
-            } else {
+            }
+            else
+            {
                 printf("Previni que dois upgrades iguais fossem escolhidos!\n");
             }
-        } else {
+        }
+        else
+        {
             upController->selectedUpgrades[addedUpgrades] = up;
             addedUpgrades++;
         }
     }
 }
 
-void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade *upgrade)
+void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager *upController, Upgrade *upgrade)
 {
     switch (upgrade->id)
     {
@@ -103,19 +118,24 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
 
-        upController->allUpgrades[upController->upgradeCount+1] = (Upgrade){
+        upController->allUpgrades[upController->upgradeCount + 1] = (Upgrade){
             .id = 6,
             .title = "Costura Reforçada",
             .description = "Aumenta o dano dos ataques da mochila em 5",
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
-        upController->allUpgrades[upController->upgradeCount+2] = (Upgrade){
+        upController->allUpgrades[upController->upgradeCount + 2] = (Upgrade){
             .id = 7,
             .title = "Alças Esticáveis",
             .description = "Aumenta o alcance dos ataques da mochila",
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
         upController->upgradeCount += 3;
+        if(n_weapons_choices == Max_Weapons){
+            UpgradeManager_RemoveSelectWeapon(upController, 3);
+            UpgradeManager_RemoveSelectWeapon(upController, 4);
+            UpgradeManager_RemoveSelectWeapon(upController, 11);
+        }
         break;
     case 4:
         Select_Weapon(Elastico);
@@ -127,19 +147,24 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
 
-        upController->allUpgrades[upController->upgradeCount+1] = (Upgrade){
+        upController->allUpgrades[upController->upgradeCount + 1] = (Upgrade){
             .id = 9,
             .title = "Borracha de Qualidade",
             .description = "Aumenta o dano causado pelos elásticos em 5",
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
-        upController->allUpgrades[upController->upgradeCount+2] = (Upgrade){
+        upController->allUpgrades[upController->upgradeCount + 2] = (Upgrade){
             .id = 10,
             .title = "Nova Remessa",
             .description = "Aumenta a quantidade de elásticos disparados em 1",
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
         };
         upController->upgradeCount += 3;
+        if(n_weapons_choices == Max_Weapons){
+            UpgradeManager_RemoveSelectWeapon(upController, 3);
+            UpgradeManager_RemoveSelectWeapon(upController, 4);
+            UpgradeManager_RemoveSelectWeapon(upController, 11);
+        }
         break;
     case 5:
         Upgrade_Weapon(&selecionadas[Get_Weapon_index(Mochila)], 1);
@@ -159,8 +184,56 @@ void UpgradeManager_Apply(SDL_Renderer *ren,UpgradeManager* upController,Upgrade
     case 10:
         Upgrade_Weapon(&selecionadas[Get_Weapon_index(Elastico)], 5);
         break;
+    case 11:
+        Select_Weapon(Cracha);
+        UpgradeManager_RemoveSelectWeapon(upController, 11);
+
+        upController->allUpgrades[upController->upgradeCount] = (Upgrade){
+            .id = 12,
+            .title = "Cracha ",
+            .description = "Diminui o tempo entre a aparição dos crachas",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/elastico.png"),
+        };
+        upController->allUpgrades[upController->upgradeCount + 1] = (Upgrade){
+            .id = 13,
+            .title = "Cracha Duro",
+            .description = "Aumenta a rigidez do cracha fazendo assim causar mais dano",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+        };
+        upController->allUpgrades[upController->upgradeCount + 2] = (Upgrade){
+            .id = 14,
+            .title = "Crachas emprestrados",
+            .description = "Aumenta a quantidade de Crachas giratorios em 1",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+        };
+        upController->allUpgrades[upController->upgradeCount + 3] = (Upgrade){
+            .id = 15,
+            .title = "Crachas Maiores",
+            .description = "Parabens seu cracha creseu",
+            .icon = IMG_LoadTexture(ren, "assets/images/upgrades/cafezinho.png"),
+        };
+        upController->upgradeCount += 4;
+        if(n_weapons_choices == Max_Weapons){
+            UpgradeManager_RemoveSelectWeapon(upController, 3);
+            UpgradeManager_RemoveSelectWeapon(upController, 4);
+            UpgradeManager_RemoveSelectWeapon(upController, 11);
+        }
+        break;
+    case 12:
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Cracha)], 1);
+        break;
+    case 13:
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Cracha)], 2);
+        break;
+    case 14:
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Cracha)], 5);
+        break;
+    case 15:
+        Upgrade_Weapon(&selecionadas[Get_Weapon_index(Cracha)], 4);
+        break;
     }
-    printf("o upgrade foi %d\n", upgrade->id);
+    
+    //printf("o upgrade foi %d\n", upgrade->id);
 }
 
 void UpgradeManager_RenderUpgradeCard(SDL_Renderer *ren, UpgradeManager *upController, Upgrade *upgrade, int x, int y, int selectedUpgrade)
@@ -170,12 +243,15 @@ void UpgradeManager_RenderUpgradeCard(SDL_Renderer *ren, UpgradeManager *upContr
 
     // Card base
     SDL_Rect cardBox;
-    if (upgrade->id == upController->selectedUpgrades[selectedUpgrade]->id) {
+    if (upgrade->id == upController->selectedUpgrades[selectedUpgrade]->id)
+    {
         cardBox.x = x - 10;
         cardBox.y = y - 10;
         cardBox.w = 260;
         cardBox.h = 360;
-    } else {
+    }
+    else
+    {
         cardBox.x = x;
         cardBox.y = y;
         cardBox.w = 240;

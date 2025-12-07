@@ -41,11 +41,11 @@ void Select_Weapon(int tipo)
 	case Cracha:
 		new_weapon.active = 0;
 		new_weapon.active_max = 1;
-		new_weapon.cooldown = 3 * seconds;
+		new_weapon.cooldown = 7 * seconds;
 		new_weapon.damage = 10;
 		new_weapon.range = 25;
 		new_weapon.recharging_time = 0;
-		new_weapon.duration = 2 * seconds;
+		new_weapon.duration = 5 * seconds;
 		new_weapon.tipo = Cracha;
 		break;
 	default:
@@ -116,12 +116,12 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 			Projectiles novo_projetil;
 			novo_projetil.dir_x = 45;
 			novo_projetil.is_on_screen = 0;
-			novo_projetil.box.x =  player.box.x + 100 * cos(novo_projetil.dir_x *  i * M_PI / 180) - selecionadas[i].range / 2;
-			novo_projetil.box.y =  player.box.y + 100 * sin(novo_projetil.dir_x  * i * M_PI / 180) - selecionadas[i].range / 2;
+			novo_projetil.box.x = player.box.x + 100 * cos(novo_projetil.dir_x * i * M_PI / 180) - selecionadas[i].range / 2;
+			novo_projetil.box.y = player.box.y + 100 * sin(novo_projetil.dir_x * i * M_PI / 180) - selecionadas[i].range / 2;
 			novo_projetil.box.w = 10;
 			novo_projetil.box.h = 10;
 			novo_projetil.active = 1;
-			novo_projetil.pierce = 1;
+			novo_projetil.pierce = 9999999;
 			novo_projetil.Weapon = arma;
 			novo_projetil.speed = 5;
 			for (int j = 0; j < Max_projectiles; j++)
@@ -172,14 +172,16 @@ void Update_Weapon(Uint32 tempo_execucao, EnemyManager *enemyController)
 			}
 			if (list_projects[i].is_on_screen - list_projects[i].is_on_screen_last >= 20)
 			{
-				if(list_projects[i].Weapon->tipo == Elastico){
+				if (list_projects[i].Weapon->tipo == Elastico)
+				{
 					list_projects[i].box.x += list_projects[i].dir_x * list_projects[i].speed;
 					list_projects[i].box.y += list_projects[i].dir_y * list_projects[i].speed;
 				}
-				else if(list_projects[i].Weapon->tipo == Cracha){
+				else if (list_projects[i].Weapon->tipo == Cracha)
+				{
 					list_projects[i].dir_x += list_projects[i].speed;
-					list_projects[i].box.y =  player.box.y + 100 * sin(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
-					list_projects[i].box.x =  player.box.x + 100 * cos(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
+					list_projects[i].box.y = (player.box.y + player.box.h / 2) + 100 * sin(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
+					list_projects[i].box.x = (player.box.x + player.box.w / 2) + 100 * cos(list_projects[i].dir_x * M_PI / 180) - list_projects[i].Weapon->range / 2;
 				}
 				list_projects[i].is_on_screen_last = list_projects[i].is_on_screen;
 			}
@@ -233,6 +235,9 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		case Elastico:
 			arma->cooldown -= 0.1 * seconds;
 			break;
+		case Cracha:
+			arma->cooldown -= 0.25 * seconds;
+			break;
 		default:
 			break;
 		}
@@ -246,6 +251,9 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		case Elastico:
 			arma->damage += 1;
 			break;
+		case Cracha:
+			arma->damage += 3;
+			break;
 		default:
 			break;
 		}
@@ -258,6 +266,9 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		case Mochila:
 			arma->range += 5;
 			break;
+		case Cracha:
+			arma->range += 3;
+			break;
 		default:
 			break;
 		}
@@ -266,6 +277,9 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		switch (armatype)
 		{
 		case Elastico:
+			arma->active_max += 1;
+			break;
+		case Cracha:
 			arma->active_max += 1;
 			break;
 
