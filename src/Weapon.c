@@ -17,7 +17,7 @@ void Select_Weapon(int tipo)
 	case Mochila:
 		new_weapon.cooldown = 2 * seconds;
 		new_weapon.damage = 10;
-		new_weapon.duration = 0.25 * seconds;
+		new_weapon.duration = 0.5 * seconds;
 		new_weapon.range = 50;
 		new_weapon.recharging_time = 0;
 		new_weapon.tipo = Mochila;
