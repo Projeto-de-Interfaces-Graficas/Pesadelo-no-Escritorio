@@ -95,6 +95,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgra
         break;
     case 2:
         player.player_hp += 20;
+        player.player_Maxhp += 20;
         break;
     case 3:
         Select_Weapon(Mochila, ren);

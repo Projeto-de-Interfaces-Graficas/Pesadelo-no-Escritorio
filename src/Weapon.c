@@ -18,7 +18,7 @@ void Select_Weapon(int tipo, SDL_Renderer* ren)
 		new_weapon.cooldown = 2 * seconds;
 		new_weapon.damage = 10;
 		new_weapon.duration = 0.5 * seconds;
-		new_weapon.range = 50;
+		new_weapon.range = 100;
 		new_weapon.recharging_time = 0;
 		new_weapon.tipo = Mochila;
 		new_weapon.active = 0;
@@ -68,7 +68,7 @@ void Active_Weapon(Arma *arma, int i, EnemyManager *enemyController)
 	switch (arma->tipo)
 	{
 	case Mochila:
-		selecionadas[i].box.w = 100;
+		selecionadas[i].box.w = selecionadas[i].range;
 		selecionadas[i].box.h = 15;
 		if (player.dir == -1)
 		{
@@ -270,7 +270,7 @@ void Upgrade_Weapon(Arma *arma, int upgrade_type)
 		switch (armatype)
 		{
 		case Mochila:
-			arma->range += 5;
+			arma->range += 20;
 			break;
 		case Cracha:
 			arma->range += 3;
