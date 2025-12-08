@@ -7,6 +7,7 @@ void UpgradeManager_Init(UpgradeManager *upController, SDL_Renderer *ren)
 {
     upController->upgradeCount = 6;
     upController->upgradeCardTexture = IMG_LoadTexture(ren, "assets/images/menus/upgrade-option.png");
+
     upController->allUpgrades[0] = (Upgrade){
         .id = 0,
         .title = "Passe da Academia",
@@ -83,10 +84,8 @@ void UpgradeManager_SelectUpgrades(UpgradeManager *upController) {
     }
 }
 
-void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgrade *upgrade)
-{
-    switch (upgrade->id)
-    {
+void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgrade *upgrade) {
+    switch (upgrade->id) {
     case 0:
         player.damage += 5;
         break;
@@ -119,6 +118,7 @@ void UpgradeManager_Apply(SDL_Renderer *ren, UpgradeManager* upController, Upgra
             .icon = IMG_LoadTexture(ren, "assets/images/upgrades/mochila.png"),
         };
         upController->upgradeCount += 3;
+        
         if(n_weapons_choices == Max_Weapons){
             UpgradeManager_RemoveSelectWeapon(upController, 3);
             UpgradeManager_RemoveSelectWeapon(upController, 4);

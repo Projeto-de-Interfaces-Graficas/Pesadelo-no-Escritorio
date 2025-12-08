@@ -5,7 +5,7 @@ void Experience_CreateXp(ExperiencePoint* xp, ExperienceType type, int x, int y,
     xp->sprite = sprite;
     switch(type) {
         case XP_SMALL:
-            xp->amount = 5;
+            xp->amount = 1;
             break;
         case XP_MEDIUM:
             xp->amount = 5;
